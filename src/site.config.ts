@@ -1,9 +1,9 @@
 export const SITE_SETTINGS = {
   title: "麻辣各八籽",
-  description: "分享各种吃喝玩乐的推荐。",
+  description: "分享美食、旅游、电影、电视剧等吃喝玩乐推荐。",
   owner: "站长",
   ogImages:
-    "https://res.cloudinary.com/dellp9a4z/image/upload/v1756758385/og-home_ejuqq8.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Sandstone_spire_forest_Zhangjiajie_Hunan.jpg/1280px-Sandstone_spire_forest_Zhangjiajie_Hunan.jpg",
   socials: [],
 };
 

@@ -8,4 +8,8 @@ const posts = (await getCollection("tv", ({ data }) => !data.draft))
     .map((p) => attachMeta(p));
 ---
 
-<ListLayout title="电视剧" description="追剧笔记与剧评。" entries={posts} />
+<ListLayout
+    title="电视剧推荐"
+    description="值得追的电视剧、美剧推荐与剧评,总有一部让你上头。"
+    entries={posts}
+/>

@@ -28,7 +28,12 @@ const nextPost = allPostsInCollection[postIndex - 1];
 <BaseLayout
     title={entry.data.title}
     description={entry.data.description}
-    ogImage={entry.data.ogImage?.src}
+    image={entry.data.image.src}
+    article={{
+        publishedTime: entry.data.pubDate,
+        modifiedTime: entry.data.updatedDate,
+        tags: entry.data.tags,
+    }}
 >
     <MediumZoom />
 

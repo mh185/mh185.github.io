@@ -8,4 +8,8 @@ const posts = (await getCollection("travel", ({ data }) => !data.draft))
     .map((p) => attachMeta(p));
 ---
 
-<ListLayout title="旅游" description="旅行记录与攻略。" entries={posts} />
+<ListLayout
+    title="旅游推荐"
+    description="精选国内外旅游目的地推荐、路线攻略与真实游记,帮你避坑、玩得更值。"
+    entries={posts}
+/>

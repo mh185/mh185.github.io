@@ -8,4 +8,8 @@ const posts = (await getCollection("movies", ({ data }) => !data.draft))
     .map((p) => attachMeta(p));
 ---
 
-<ListLayout title="电影" description="观影笔记与影评。" entries={posts} />
+<ListLayout
+    title="电影推荐"
+    description="好看的电影推荐与影评,恐怖、悬疑、爱情各种类型,帮你挑到不踩雷的好片。"
+    entries={posts}
+/>
