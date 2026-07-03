@@ -12,13 +12,20 @@ tags:
   - 天门山
   - 旅游攻略
 image:
-  src: /images/zhangjiajie/cover.jpg
+  src: https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Sandstone_spire_forest_Zhangjiajie_Hunan.jpg/1280px-Sandstone_spire_forest_Zhangjiajie_Hunan.jpg
   alt: 张家界武陵源的石英砂岩石柱峰林
 ---
 
 如果要在中国选一个"看一眼就不像真实世界"的地方,张家界一定排得上号。三千根石英砂岩巨柱拔地而起,云雾在半山腰流动,山顶还长着树——难怪《阿凡达》要把"哈利路亚悬浮山"的灵感放在这里。
 
 这篇把张家界最值得去的几块地方、怎么玩、吃什么、以及踩坑提醒都写清楚,收藏一篇就够用。
+
+先感受一下张家界雪后的云海仙境 👇
+
+<div id="scenic-video">
+  <video src="https://upload.wikimedia.org/wikipedia/commons/4/40/2019%E5%B9%B41%E6%9C%883%E6%97%A5_%E5%BC%A0%E5%AE%B6%E7%95%8C%E9%9B%AA%E5%90%8E%E9%9B%BE%E5%87%87%E4%BA%91%E6%B5%B7%E6%9C%A6%E8%83%A7%E5%A6%82%E4%BB%99%E5%A2%83.webm" autoplay muted loop playsinline controls poster="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Sandstone_spire_forest_Zhangjiajie_Hunan.jpg/1280px-Sandstone_spire_forest_Zhangjiajie_Hunan.jpg" onerror="document.getElementById('scenic-video').style.display='none'" style="width:100%;border-radius:0.75rem;background:#000;"></video>
+  <p style="text-align:center;font-style:italic;color:#888;margin:0.5rem 0 0;">雪后雾凇、云海翻涌,宛如仙境。静音自动循环播放,点一下可取消静音。</p>
+</div>
 
 ## 一、先搞清楚"张家界"到底指什么
 
@@ -36,19 +43,19 @@ image:
 
 ### 袁家界 · 阿凡达的悬浮山
 
-![袁家界的乾坤柱,《阿凡达》悬浮山原型](/images/zhangjiajie/yuanjiajie.jpg)
+![袁家界的乾坤柱,《阿凡达》悬浮山原型](https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Avatar_country_%2853963201036%29.jpg/1280px-Avatar_country_%2853963201036%29.jpg)
 
 袁家界是绝对的顶流。这里的"乾坤柱"后来被官方改名为"哈利路亚山",一根近乎垂直的石柱孤零零地立在峡谷里,云雾一起就真有电影里那味儿了。**迷魂台、天下第一桥**也都在这一片,走一圈约两三个小时。
 
 ### 天子山 · 峰林之王
 
-![天子山云海中的峰林](/images/zhangjiajie/tianzishan.jpg)
+![天子山云海中的峰林](https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/1_tianzishan_wulingyuan_zhangjiajie_2012.jpg/1280px-1_tianzishan_wulingyuan_zhangjiajie_2012.jpg)
 
 如果说袁家界看的是"单峰",天子山看的就是"群峰"。**御笔峰、仙女散花**这些观景台,视野能一路铺到天边。运气好赶上雨后放晴,云海在脚下翻涌,是张家界最出片的时刻。
 
 ### 黄石寨 · 一览众山小
 
-![黄石寨观景台的峰林全景](/images/zhangjiajie/huangshizhai.jpg)
+![黄石寨观景台的峰林全景](https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/1_zhangjiajie_huangshizhai_wulingyuan_panorama_2012.jpg/1280px-1_zhangjiajie_huangshizhai_wulingyuan_panorama_2012.jpg)
 
 当地有句话:"不上黄石寨,枉到张家界。"黄石寨是森林公园里最大的凌空观景台,可以坐索道上,也能徒步。站在寨顶转一圈,前面说的那些峰林尽收眼底。
 
@@ -58,7 +65,7 @@ image:
 
 ### 百龙天梯 · 悬崖上的电梯
 
-![百龙天梯,建在垂直崖壁上的观光电梯](/images/zhangjiajie/bailong-elevator.jpg)
+![百龙天梯,建在垂直崖壁上的观光电梯](https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/The_Bailong_Elevator.jpg/1280px-The_Bailong_Elevator.jpg)
 
 垂直高度 **326 米**,直接贴着崖壁往上建,曾被认证为"世界最高的户外观光电梯"。几十秒从谷底升到山顶,省下几个小时的爬升。旺季排队较长,建议错峰。
 
@@ -68,13 +75,13 @@ image:
 
 ### 天门洞 · 999 级上天梯
 
-![天门山的天门洞](/images/zhangjiajie/tianmen-cave.jpg)
+![天门山的天门洞](https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Heaven%27s_Gate_Mtns%2C_Hunan%2C_China_-_panoramio.jpg/1280px-Heaven%27s_Gate_Mtns%2C_Hunan%2C_China_-_panoramio.jpg)
 
 山体上天然裂出一个巨大的穿洞,就是**天门洞**。洞下 999 级"上天梯"笔直向上,配上常年缭绕的云雾,气势十足。上山那段 **99 道弯**的盘山公路本身也是名场面。
 
 ### 山顶 · 玻璃栈道与云海
 
-![天门山山顶的悬崖栈道](/images/zhangjiajie/tianmen-top.jpg)
+![天门山山顶的悬崖栈道](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/At_the_top_of_Tianmenshan_-_panoramio.jpg/1280px-At_the_top_of_Tianmenshan_-_panoramio.jpg)
 
 山顶一圈是沿悬崖修的栈道,包含几段**玻璃栈道**——脚下就是几百米深的空。恐高的话可以走普通鬼谷栈道绕开。经典玩法:**索道上、大巴+扶梯下**(或反过来),把天门洞和山顶一次刷完。
 
