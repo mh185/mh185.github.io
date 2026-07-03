@@ -23,7 +23,7 @@ image:
 先感受一下张家界雪后的云海仙境 👇
 
 <div id="scenic-video">
-  <video src="https://upload.wikimedia.org/wikipedia/commons/4/40/2019%E5%B9%B41%E6%9C%883%E6%97%A5_%E5%BC%A0%E5%AE%B6%E7%95%8C%E9%9B%AA%E5%90%8E%E9%9B%BE%E5%87%87%E4%BA%91%E6%B5%B7%E6%9C%A6%E8%83%A7%E5%A6%82%E4%BB%99%E5%A2%83.webm" autoplay muted loop playsinline controls poster="/images/zhangjiajie/cover.jpg" onerror="document.getElementById('scenic-video').style.display='none'" style="width:100%;border-radius:0.75rem;background:#000;"></video>
+  <video src="https://upload.wikimedia.org/wikipedia/commons/4/40/2019%E5%B9%B41%E6%9C%883%E6%97%A5_%E5%BC%A0%E5%AE%B6%E7%95%8C%E9%9B%AA%E5%90%8E%E9%9B%BE%E5%87%87%E4%BA%91%E6%B5%B7%E6%9C%A6%E8%83%A7%E5%A6%82%E4%BB%99%E5%A2%83.webm" autoplay muted loop playsinline controls onerror="document.getElementById('scenic-video').style.display='none'" style="width:100%;border-radius:0.75rem;background:#000;"></video>
   <p style="text-align:center;font-style:italic;color:#888;margin:0.5rem 0 0;">雪后雾凇、云海翻涌,宛如仙境。静音自动循环播放,点一下可取消静音。</p>
 </div>
 

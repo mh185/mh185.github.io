@@ -1,5 +1,6 @@
 ---
 draft: false
+featured: '20'
 title: "《奥本海默》:诺兰把一场历史审判拍成心理核爆"
 description: 《奥本海默》影评与观影指南:从原子弹之父到听证会结构,解析诺兰如何用传记片拍出权力、科学和良知的连锁反应。
 pubDate: 2026-07-03
@@ -54,6 +55,17 @@ image:
 ## 结语
 
 《奥本海默》是一部越想越沉的电影。它的爆炸不只发生在沙漠里,也发生在一个人的良知里。看完之后你记住的不是蘑菇云,而是那个终于意识到自己改变了世界的人。
+<!-- featured-enhancement -->
+## 精选补充: 为什么值得放进首页
+这篇被设为精选, 是因为它不只适合一次性阅读, 也适合作为分类入口。无论是第一次了解作品, 还是看完之后回头复盘, 它都能提供清晰的观看线索: 先抓人物, 再看结构, 最后回到主题和情绪余味。
+### 外链视频
+
+<div class="not-prose my-8 aspect-video overflow-hidden rounded-xl bg-black">
+  <iframe src="https://www.youtube-nocookie.com/embed/uYPbbksJxIg" title="oppenheimer 外链视频" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;height:100%;border:0;"></iframe>
+</div>
+![精选图集: 关键氛围场景](/images/movies/oppenheimer/backdrop-3.jpg)
+![精选图集: 角色与空间关系](/images/movies/oppenheimer/backdrop-4.jpg)
+精选文章的阅读顺序建议是: 先看开头判断自己是否感兴趣, 再看人物和主题拆解, 最后结合图像与视频回到作品本身。这样不会只停留在“评分高”“热度高”, 而能真正知道它为什么值得看。
 
 ---
 
