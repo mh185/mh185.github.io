@@ -7,33 +7,35 @@ import EmptyState from "../components/ui/EmptyState.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { attachMeta } from "../utils/meta";
 
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-const allProjects = await getCollection("projects", ({ data }) => !data.draft);
+// 首页汇总所有栏目的内容
+const [blog, travel, movies, tv] = await Promise.all([
+    getCollection("blog", ({ data }) => !data.draft),
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
 
-const sortedPosts = allPosts.sort(
+const all = [...blog, ...travel, ...movies, ...tv];
+
+const sorted = all.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const sortedProjects = allProjects.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
 
-const latestPosts = sortedPosts.slice(0, 3).map((post) => attachMeta(post));
-const latestProjects = sortedProjects
-    .slice(0, 2)
-    .map((project) => attachMeta(project));
-
-const featured = [...allPosts, ...allProjects]
+const featured = all
     .filter((item) => item.data.featured !== undefined)
     .sort((a, b) => (a.data.featured ?? 0) - (b.data.featured ?? 0));
 
-const hasContent =
-    featured.length > 0 || latestPosts.length > 0 || latestProjects.length > 0;
+const featuredKeys = new Set(featured.map((f) => `${f.collection}/${f.id}`));
+
+const latest = sorted
+    .filter((p) => !featuredKeys.has(`${p.collection}/${p.id}`))
+    .slice(0, 6)
+    .map((p) => attachMeta(p));
+
+const hasContent = featured.length > 0 || latest.length > 0;
 ---
 
-<BaseLayout
-    title="我的博客"
-    description="记录想法,分享我正在学习的东西。"
->
+<BaseLayout>
     <Container class="space-y-24 py-12">
         {
             hasContent ? (
@@ -42,22 +44,12 @@ const hasContent =
                         <FeaturedContent items={featured} />
                     )}
 
-                    {latestPosts.length > 0 && (
+                    {latest.length > 0 && (
                         <ContentGrid
-                            title="最新文章"
+                            title="最新内容"
                             href="/blog"
-                            viewAllText="查看全部文章 →"
-                            items={latestPosts}
-                        />
-                    )}
-
-                    {latestProjects.length > 0 && (
-                        <ContentGrid
-                            title="最新项目"
-                            href="/projects"
-                            viewAllText="查看全部项目 →"
-                            items={latestProjects}
-                            class="grid grid-cols-1 gap-8 md:grid-cols-2"
+                            viewAllText="查看全部 →"
+                            items={latest}
                         />
                     )}
                 </>

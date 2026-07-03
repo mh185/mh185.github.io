@@ -81,7 +81,7 @@ const { title, description, image } = data;
     <span
         class="absolute top-0 left-0 z-50 m-2 inline-block rounded-md bg-black/70 px-3 py-1.5 text-xs font-medium text-white capitalize sm:text-sm md:m-2.5"
     >
-        {collection === "projects" ? "项目" : "博客"}
+        {{ blog: "博客", travel: "旅游", movies: "电影", tv: "电视剧", projects: "项目" }[collection]}
     </span>
 
     <div class={textBox({ size })}>

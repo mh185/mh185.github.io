@@ -51,15 +51,19 @@ const blog = defineCollection({
   schema: baseSchema,
 });
 
-const projects = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
-  schema: baseSchema.extend({
-    repoUrl: z.string().url().optional(),
-    demoUrl: z.string().url().optional(),
-    status: z
-      .enum(["completed", "in-progress", "planned"])
-      .default("completed"),
-  }),
+const travel = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/travel" }),
+  schema: baseSchema,
+});
+
+const movies = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/movies" }),
+  schema: baseSchema,
+});
+
+const tv = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/tv" }),
+  schema: baseSchema,
 });
 
 const legal = defineCollection({
@@ -84,7 +88,9 @@ const about = defineCollection({
 export const collections = {
   licenses,
   blog,
-  projects,
+  travel,
+  movies,
+  tv,
   legal,
   about,
 };

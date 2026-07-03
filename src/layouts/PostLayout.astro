@@ -18,10 +18,7 @@ const { entry } = Astro.props;
 
 const { Content, headings } = await render(entry);
 
-const allPostsInCollection =
-    entry.collection === "blog"
-        ? await getCollection("blog")
-        : await getCollection("projects");
+const allPostsInCollection = await getCollection(entry.collection);
 
 const postIndex = allPostsInCollection.findIndex((e) => e.id === entry.id);
 const prevPost = allPostsInCollection[postIndex + 1];

@@ -1,27 +1,28 @@
 export const SITE_SETTINGS = {
-  title: "我的博客",
-  description: "记录想法,分享我正在学习的东西。",
+  title: "麻辣各八籽",
+  description: "分享各种吃喝玩乐的推荐。",
   owner: "站长",
   ogImages:
     "https://res.cloudinary.com/dellp9a4z/image/upload/v1756758385/og-home_ejuqq8.png",
-  socials: [
-    {
-      icon: "github",
-      label: "GitHub",
-      url: "https://github.com/truedaniyyel",
-      handle: "truedaniyyel",
-    },
-  ],
+  socials: [],
 };
 
 export const header = [
   {
-    name: "博客",
-    url: "/blog",
+    name: "首页",
+    url: "/",
   },
   {
-    name: "项目",
-    url: "/projects",
+    name: "旅游",
+    url: "/travel",
+  },
+  {
+    name: "电影",
+    url: "/movies",
+  },
+  {
+    name: "电视剧",
+    url: "/tv",
   },
   {
     name: "关于",
@@ -38,12 +39,16 @@ export const footer = [
         url: "/search",
       },
       {
-        name: "博客",
-        url: "/blog",
+        name: "旅游",
+        url: "/travel",
       },
       {
-        name: "项目",
-        url: "/projects",
+        name: "电影",
+        url: "/movies",
+      },
+      {
+        name: "电视剧",
+        url: "/tv",
       },
       {
         name: "关于",

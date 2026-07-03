@@ -4,14 +4,23 @@ export type SiteSettings = {};
 
 export type ContentEntry =
   | CollectionEntry<"blog">
-  | CollectionEntry<"projects">;
+  | CollectionEntry<"travel">
+  | CollectionEntry<"movies">
+  | CollectionEntry<"tv">;
 
 export type AllContentEntry =
   | CollectionEntry<"blog">
-  | CollectionEntry<"projects">
+  | CollectionEntry<"travel">
+  | CollectionEntry<"movies">
+  | CollectionEntry<"tv">
   | CollectionEntry<"legal">;
 
-export type ContentCollections = "blog" | "projects" | "legal";
+export type ContentCollections =
+  | "blog"
+  | "travel"
+  | "movies"
+  | "tv"
+  | "legal";
 
 export interface PostMeta {
   plainText: string;

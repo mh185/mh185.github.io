@@ -1,0 +1,11 @@
+---
+import { getCollection } from "astro:content";
+import ListLayout from "../../layouts/ListLayout.astro";
+import { attachMeta } from "../../utils/meta";
+
+const posts = (await getCollection("movies", ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .map((p) => attachMeta(p));
+---
+
+<ListLayout title="电影" description="观影笔记与影评。" entries={posts} />
