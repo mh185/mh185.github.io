@@ -11,7 +11,8 @@ const featuredSchema = z
   });
 
 const imageSchema = z.object({
-  src: z.string().url(),
+  // 允许本地路径(如 /images/xxx.jpg)或完整 URL
+  src: z.string().min(1),
   alt: z.string().optional(),
 });
 
