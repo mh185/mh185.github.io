@@ -12,7 +12,7 @@ tags:
   - 最美海岸线
   - 旅游推荐
 image:
-  src: https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Shenzhen_Observatory2021.jpg/1280px-Shenzhen_Observatory2021.jpg
+  src: /images/dapeng/observatory.jpg
   alt: 阳光下的深圳天文台白色穹顶,俯瞰大鹏海岸线
 ---
 
@@ -30,13 +30,13 @@ image:
 
 天文台脚下的西涌,是这条海岸线的精华:晴天的时候,蓝天、绿山、白浪、细沙层层铺开,是深圳数一数二的出片地。
 
-![西涌晴天的沙滩与海岸](https://upload.wikimedia.org/wikipedia/commons/0/02/%E8%A5%BF%E5%86%B2%E9%A3%8E%E5%85%89Scenery_in_ShenZhen%2C_China_-_panoramio.jpg)
+![西涌晴天的沙滩与海岸](/images/dapeng/xichong.jpg)
 
 - **西涌海滩**:深圳最长、也最美的海滩之一,沙细坡缓,适合看日出、赶海、露营。
 - **一个接一个的海湾**:像鹅公湾这样安静的小海湾散落在海岸边,人少、水清,傍晚的夕阳尤其美。
 - **东西涌穿越**:从东涌到西涌的一段海岸徒步线,一路礁石、海湾、无敌海景。**但地形有难度、涨潮与天气都有风险,务必查好当前开放与安全信息、结伴而行,别逞强。**
 
-![鹅公湾夕阳下的海湾](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/%E9%B9%85%E5%85%AC%E6%B9%BE%EF%BC%8C%E5%A4%95%E9%98%B3%E4%B8%8B_-_panoramio.jpg/1280px-%E9%B9%85%E5%85%AC%E6%B9%BE%EF%BC%8C%E5%A4%95%E9%98%B3%E4%B8%8B_-_panoramio.jpg)
+![鹅公湾夕阳下的海湾](/images/dapeng/egongwan-sunset.jpg)
 
 ## 三、杨梅坑 · 鹿嘴山庄:海岸线的另一极
 
