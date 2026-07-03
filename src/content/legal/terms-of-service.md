@@ -1,57 +1,39 @@
 ---
 draft: false
-title: Terms of Service
-description: Read the terms and conditions for using Daniel Adrian's website and services.
-lastUpdated: 2025-08-01T03:20:00.000Z
-ogImage:
-  src: >-
-    https://res.cloudinary.com/dellp9a4z/image/upload/v1756758388/og-terms-of-service_l6gfoa.png
-  alt: >-
-    The graphic has a two-column layout on a light blue, gridded background. On
-    the left, it displays a profile picture of a man with the text "Daniel
-    Adrian's SPACE" below. The right side features the large heading "Terms of
-    Service" and a brief description inviting users to read the terms and
-    conditions for using the website and its services.
+title: 服务条款
+description: 使用本站需遵守的条款。
+lastUpdated: 2026-07-03
 ---
-Welcome to this website. By accessing or using the site, you agree to comply with and be
-bound by the following terms and conditions.
+欢迎访问本站。访问或使用本站,即表示你同意遵守以下条款。
 
-## Use of the Site
+## 网站使用
 
-This site and its contents are provided for informational purposes only. You may not copy,
-reproduce, distribute, or otherwise exploit any content without prior written permission.
+本站及其内容仅供个人分享与参考之用。未经事先书面许可,请勿复制、转载、分发或以其他方式利用本站内容。
 
-## User Responsibilities
+## 用户行为
 
-You agree not to misuse the site or engage in any activity that could harm the site, its
-users, or third parties.
+你同意不滥用本站,不从事任何可能损害本站、其他访客或第三方的行为。
 
-## Intellectual Property
+## 知识产权
 
-All content on this site is owned by us or our licensors and is protected by applicable
-intellectual property laws.
+本站的原创内容归站长所有,受相关法律保护。
 
-## Third-Party Services and Links
+## 第三方链接
 
-This site is hosted by Cloudflare. Content delivery, security, and performance features are provided according to Cloudflare’s policies.
+本站可能包含指向第三方网站的链接(如推荐的店铺、影视资源等)。对于这些第三方网站的内容、交易与政策,本站不承担责任。
 
-The site may also contain links to third-party websites, including external shops where purchases are made. We are not responsible for the content, transactions, fulfillment, or policies of any third-party sites.
+## 免责声明
 
-## Disclaimer of Warranties
+本站按“现状”提供,所有推荐均为个人主观意见,不构成任何保证或专业建议,请自行判断后决定。
 
-The site is provided on an "as is" and "as available" basis without warranties of any kind,
-either express or implied.
+## 责任限制
 
-## Limitation of Liability
+在任何情况下,因使用本站或依赖本站信息而产生的损失,本站不承担责任。
 
-In no event shall we be liable for any damages arising from your use of the site or reliance
-on any information provided.
+## 条款更新
 
-## Changes to These Terms
+本条款可能会不时更新,继续使用本站即视为接受修订后的条款。
 
-We may update these Terms from time to time. Continued use of the site constitutes
-acceptance of the revised terms.
+## 联系
 
-## Contact
-
-If you have any questions about these Terms, please [contact me](/contact)
+如对本条款有疑问,可在[关于页](/about)了解更多。

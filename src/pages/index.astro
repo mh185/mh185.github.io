@@ -8,14 +8,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { attachMeta } from "../utils/meta";
 
 // 首页汇总所有栏目的内容
-const [blog, travel, movies, tv] = await Promise.all([
-    getCollection("blog", ({ data }) => !data.draft),
+const [travel, movies, tv] = await Promise.all([
     getCollection("travel", ({ data }) => !data.draft),
     getCollection("movies", ({ data }) => !data.draft),
     getCollection("tv", ({ data }) => !data.draft),
 ]);
 
-const all = [...blog, ...travel, ...movies, ...tv];
+const all = [...travel, ...movies, ...tv];
 
 const sorted = all.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -45,12 +44,10 @@ const hasContent = featured.length > 0 || latest.length > 0;
                     )}
 
                     {latest.length > 0 && (
-                        <ContentGrid
-                            title="最新内容"
-                            href="/blog"
-                            viewAllText="查看全部 →"
-                            items={latest}
-                        />
+                        <section>
+                            <h2 class="mb-12 text-3xl font-bold">最新内容</h2>
+                            <ContentGrid items={latest} />
+                        </section>
                     )}
                 </>
             ) : (

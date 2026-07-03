@@ -46,11 +46,6 @@ const baseSchema = z.object({
   ogImage: ogImageOptionalSchema,
 });
 
-const blog = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
-  schema: baseSchema,
-});
-
 const travel = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/travel" }),
   schema: baseSchema,
@@ -87,7 +82,6 @@ const about = defineCollection({
 
 export const collections = {
   licenses,
-  blog,
   travel,
   movies,
   tv,

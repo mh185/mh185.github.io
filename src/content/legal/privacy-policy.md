@@ -1,50 +1,30 @@
 ---
-title: Privacy Policy
-description: >-
-  Learn how Daniel Adrian's website collects, uses, and protects your personal
-  information.
-lastUpdated: 2025-08-01T03:24:00.000Z
-ogImage:
-  src: >-
-    https://res.cloudinary.com/dellp9a4z/image/upload/v1756758390/og-privacy-policy_eekzan.png
-  alt: >-
-    The graphic has a two-column layout on a light blue, gridded background. On
-    the left, it displays a profile picture of a man with the text "Daniel
-    Adrian's SPACE" below. The right side features the large heading "Privacy
-    Policy" and a brief description of what the policy covers, which is how the
-    website collects, uses, and protects personal information.
+title: 隐私政策
+description: 说明本站如何处理你的信息。
+lastUpdated: 2026-07-03
 ---
-Your privacy is important. This policy explains what information is collected and how it is
-used when you interact with this site.
+本站是一个静态的个人分享网站,尽量做到最少的信息收集。
 
-## Contact Form
+## 不收集个人信息
 
-When you use the contact form, your name, email address, and message are sent directly to me so that I can respond. This information is not stored on the site after the message is delivered.
+本站没有注册、登录、评论或表单功能,不会主动收集你的姓名、邮箱等个人信息。
 
-## Emails
+## 托管与访问日志
 
-Transactional emails, such as confirmations or replies, are sent using Resend. Your email address is processed only to deliver these messages. I may also reply from my personal email account, but your information is not shared with any other party.
+本站托管在 GitHub Pages 上。访问时,托管方可能会按其隐私政策记录标准的服务器日志(如 IP、浏览器类型),用于安全与运营,本站无法访问这些数据。
 
-## Newsletter
+## Cookie 与本地存储
 
-If you subscribe to the newsletter, your email address is collected by ConvertKit. It is
-used only to send you updates and is handled according to their privacy policy. You can
-unsubscribe at any time.
+本站仅可能使用少量本地存储(localStorage)来记住你的深色/浅色主题偏好,不用于追踪或广告。
 
-## Real User Measurements
+## 第三方内容
 
-Anonymous performance data is gathered through Real User Measurements to help improve the site. This information does not personally identify you and is used only for analytics.
+文章中的图片或链接可能来自第三方网站。访问这些外部链接时,请参阅对方各自的隐私政策。
 
-## Cookies
+## 政策更新
 
-A single short-lived cookie may be set to remember preferences or provide essential
-functionality. It expires quickly and is not used for tracking or advertising.
+本政策可能会不时更新,更新后继续使用本站即视为接受修订后的内容。
 
-## Changes to This Policy
+## 联系
 
-This policy may be updated from time to time. Continued use of the site after changes are
-posted constitutes acceptance of the revised policy.
-
-## Contact
-
-If you have questions about this Privacy Policy, please [contact me](/contact)
+如对本隐私政策有疑问,可在[关于页](/about)了解更多。

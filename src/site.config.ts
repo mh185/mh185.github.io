@@ -63,10 +63,6 @@ export const footer = [
         name: "RSS",
         url: "/rss.xml",
       },
-      {
-        name: "站点地图",
-        url: "/sitemap-index.xml",
-      },
     ],
   },
 ];

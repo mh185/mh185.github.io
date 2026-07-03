@@ -6,7 +6,6 @@ import { SITE_SETTINGS } from "../site.config";
 
 export async function GET(context: APIContext) {
   const collections = await Promise.all([
-    getCollection("blog", ({ data }) => !data.draft),
     getCollection("travel", ({ data }) => !data.draft),
     getCollection("movies", ({ data }) => !data.draft),
     getCollection("tv", ({ data }) => !data.draft),

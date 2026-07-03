@@ -3,20 +3,17 @@ import type { CollectionEntry } from "astro:content";
 export type SiteSettings = {};
 
 export type ContentEntry =
-  | CollectionEntry<"blog">
   | CollectionEntry<"travel">
   | CollectionEntry<"movies">
   | CollectionEntry<"tv">;
 
 export type AllContentEntry =
-  | CollectionEntry<"blog">
   | CollectionEntry<"travel">
   | CollectionEntry<"movies">
   | CollectionEntry<"tv">
   | CollectionEntry<"legal">;
 
 export type ContentCollections =
-  | "blog"
   | "travel"
   | "movies"
   | "tv"
