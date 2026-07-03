@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Link from "../ui/link/Link.astro";
+
+interface Props {
+    license: CollectionEntry<"licenses">;
+}
+
+const { license } = Astro.props;
+const { name, url, description } = license.data;
+---
+
+<div class="flex items-center gap-2">
+    <span>版权:</span>
+    <Link
+        href={url}
+        title={description}
+        class="text-neutral-950 underline underline-offset-4 dark:text-neutral-50"
+    >
+        {name}
+    </Link>
+</div>

@@ -1,0 +1,14 @@
+---
+import { cn } from "../../../utils/styles";
+import type { HTMLAttributes } from "astro/types";
+import { type FieldVariants, field } from "./styles";
+
+interface Props extends HTMLAttributes<"input">, FieldVariants {
+    name: string;
+    placeholder?: string;
+}
+
+const { class: cls, intent, ...rest } = Astro.props;
+---
+
+<input {...rest} class={cn(field({ intent }), cls)} />

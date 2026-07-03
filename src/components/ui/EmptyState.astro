@@ -1,0 +1,18 @@
+---
+interface Props {
+    title?: string;
+    message?: string;
+}
+
+const {
+    title = "这里还什么都没有…",
+    message = "很快会有新的文章和项目,欢迎稍后再来!",
+} = Astro.props;
+---
+
+<div
+    class="mx-auto max-w-md rounded-lg border border-neutral-200 bg-neutral-50 p-8 text-center dark:border-neutral-700 dark:bg-neutral-900"
+>
+    <h2 class="text-xl font-semibold">{title}</h2>
+    <p class="mt-2">{message}</p>
+</div>

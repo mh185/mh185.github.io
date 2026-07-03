@@ -1,0 +1,73 @@
+---
+import { isCloudinaryUrl, lqip, mainAt } from "../../utils/cloudinary";
+import { cn } from "../../utils/styles";
+
+interface Props {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    wrapperClass?: string;
+    imageClass?: string;
+    loading?: "lazy" | "eager";
+    fetchpriority?: "high" | "low" | "auto";
+    [key: string]: unknown;
+}
+
+const {
+    src,
+    alt = "",
+    width,
+    height,
+    wrapperClass = "",
+    imageClass = "",
+    loading = "lazy",
+    fetchpriority,
+    ...rest
+} = Astro.props;
+
+const fetchPriorityVal =
+    loading === "eager" ? (fetchpriority ?? "high") : undefined;
+
+// URL-only helpers (no Cloudinary SDK): a remote Cloudinary URL gets a resized
+// transform + blur placeholder; any other URL is used as-is.
+const lqipUrl = isCloudinaryUrl(src) ? lqip(src) : undefined;
+const mainSrc =
+    isCloudinaryUrl(src) && width ? mainAt(src, Number(width)) : src;
+---
+
+<div
+    class={cn(
+        "relative overflow-hidden bg-neutral-200 dark:bg-neutral-700",
+        wrapperClass,
+    )}
+>
+    {
+        lqipUrl && (
+            <img
+                data-pagefind-ignore
+                src={lqipUrl}
+                alt=""
+                aria-hidden="true"
+                class={cn(
+                    "absolute inset-0 h-full w-full scale-105 object-cover blur-xl",
+                    imageClass,
+                )}
+                loading="eager"
+                decoding="async"
+            />
+        )
+    }
+
+    <img
+        src={mainSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        class={cn("absolute inset-0 h-full w-full object-cover", imageClass)}
+        loading={loading}
+        fetchpriority={fetchPriorityVal}
+        decoding="async"
+        {...rest}
+    />
+</div>

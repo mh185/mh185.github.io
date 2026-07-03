@@ -1,0 +1,41 @@
+---
+import Container from "../components/layouts/Container.astro";
+import EmptyState from "../components/ui/EmptyState.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
+import BaseLayout from "./BaseLayout.astro";
+import Card from "../components/content/Card.astro";
+
+import type { ContentEntry, WithMeta } from "../types";
+
+interface Props {
+    title: string;
+    description?: string;
+    ogImage?: string;
+    entries: WithMeta<ContentEntry>[];
+}
+
+const { title, description = "", entries, ogImage } = Astro.props;
+
+const collection = entries[0]?.collection;
+---
+
+<BaseLayout {title} {description} {ogImage}>
+    <Container class="py-12">
+        <PageTitle {title} />
+
+        {
+            entries.length === 0 ? (
+                <EmptyState
+                    title="这里还什么都没有…"
+                    message="很快会有新内容,欢迎稍后再来!"
+                />
+            ) : (
+                <div class="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+                    {entries.map((entry) => (
+                        <Card {entry} />
+                    ))}
+                </div>
+            )
+        }
+    </Container>
+</BaseLayout>

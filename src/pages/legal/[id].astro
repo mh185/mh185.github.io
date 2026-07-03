@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from "astro:content";
+import Article from "../../components/content/Article.astro";
+import FormattedDate from "../../components/content/FormattedDate.astro";
+import Prose from "../../components/content/Prose.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const legal = await getCollection("legal");
+
+    return legal.map((docs) => ({
+        params: { id: docs.id },
+        props: { docs },
+    }));
+}
+
+const { docs } = Astro.props;
+
+const { Content } = await render(docs);
+
+const {
+    data: { title, lastUpdated },
+} = docs;
+---
+
+<BaseLayout entry={docs}>
+    <Article>
+        <header class="mb-12">
+            <h1 class="mb-6 text-4xl font-bold sm:text-5xl sm:leading-snug">
+                {title}
+            </h1>
+
+            {
+                lastUpdated && (
+                    <p class="text-lg">
+                        <span class="font-bold">Last updated:</span>{" "}
+                        <FormattedDate date={lastUpdated} />
+                    </p>
+                )
+            }
+        </header>
+
+        <Prose>
+            <Content />
+        </Prose>
+    </Article>
+</BaseLayout>

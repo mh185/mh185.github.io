@@ -1,0 +1,77 @@
+---
+import FeaturedCard from "../../content/FeaturedCard.astro";
+import type { ContentEntry } from "../../../types";
+
+interface Props {
+    items: ContentEntry[];
+}
+
+const { items } = Astro.props;
+
+const count = items.length;
+
+const [firstItem, secondItem, thirdItem] = items;
+
+if (count === 0) return null;
+---
+
+<section>
+    <h2 class="sr-only">精选内容</h2>
+
+    <!-- Case 1: ONE featured item -->
+    {
+        count === 1 && (
+            <div class="grid grid-cols-1 gap-6">
+                <FeaturedCard
+                    entry={firstItem}
+                    size="full"
+                    loading="eager"
+                    fetchpriority="high"
+                />
+            </div>
+        )
+    }
+
+    <!-- Case 2: TWO featured items -->
+    {
+        count === 2 && (
+            <div class="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 md:gap-3.5 lg:gap-6">
+                <FeaturedCard
+                    entry={firstItem}
+                    size="small"
+                    loading="eager"
+                    fetchpriority="high"
+                />
+                <FeaturedCard entry={secondItem} size="small" loading="eager" />
+            </div>
+        )
+    }
+
+    <!-- Case 3: THREE or MORE featured items -->
+    {
+        count >= 3 && (
+            <div class="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 md:gap-3 lg:grid-cols-3 lg:gap-6">
+                <div class="lg:col-span-2">
+                    <FeaturedCard
+                        entry={firstItem}
+                        size="large"
+                        loading="eager"
+                        fetchpriority="high"
+                    />
+                </div>
+                <div class="flex flex-col gap-4 sm:gap-5 md:gap-3.5 lg:gap-6">
+                    <FeaturedCard
+                        entry={secondItem}
+                        size="small"
+                        loading="eager"
+                    />
+                    <FeaturedCard
+                        entry={thirdItem}
+                        size="small"
+                        loading="eager"
+                    />
+                </div>
+            </div>
+        )
+    }
+</section>

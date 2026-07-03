@@ -1,0 +1,86 @@
+---
+import Link from "../ui/link/Link.astro";
+import SocialLinks from "../ui/SocialLinks.astro";
+import {
+    footer as footerLinkSections,
+    SITE_SETTINGS as site,
+} from "../../site.config";
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer
+    class="relative z-50 mt-24 border-t border-neutral-200 bg-gray-50 dark:border-neutral-700 dark:bg-neutral-950"
+>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="py-16">
+            <div
+                class="flex flex-wrap gap-x-12 gap-y-10 sm:flex-row sm:items-start sm:justify-between lg:flex-nowrap"
+            >
+                <!-- Brand -->
+                <div class="order-2 max-w-2xs space-y-4 lg:order-1">
+                    <h2 class="text-lg font-semibold">
+                        {site.title}
+                    </h2>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                        {site.description}
+                    </p>
+
+                    <SocialLinks />
+                </div>
+
+                <!-- Footer Link Sections -->
+                {
+                    footerLinkSections.map((section) => (
+                        <div class="order-3 flex-1 basis-0 lg:order-2 lg:flex-none lg:basis-auto">
+                            <h3 class="text-sm font-semibold tracking-wider uppercase">
+                                {section.title}
+                            </h3>
+                            <ul class="mt-4 space-y-2">
+                                {section.links.map((link) => (
+                                    <li>
+                                        <Link
+                                            variant="plain"
+                                            href={link.url}
+                                            class="text-sm"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-neutral-300 py-8 dark:border-neutral-700">
+            <div
+                class="flex flex-col items-center justify-between gap-4 sm:flex-row"
+            >
+                <p class="text-sm">
+                    &copy; {currentYear}
+                    {site.title}. 保留所有权利。
+                </p>
+                <div class="flex space-x-6">
+                    <Link
+                        variant="plain"
+                        href="/legal/privacy-policy"
+                        class="text-sm"
+                    >
+                        隐私政策
+                    </Link>
+                    <Link
+                        variant="plain"
+                        href="/legal/terms-of-service"
+                        class="text-sm"
+                    >
+                        服务条款
+                    </Link>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

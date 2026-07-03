@@ -1,0 +1,48 @@
+---
+import { SITE_SETTINGS as site } from "../../site.config";
+import { cn } from "../../utils/styles";
+import { Icon } from "astro-icon/components";
+
+type Social = (typeof site)["socials"][number];
+
+interface Props {
+    items?: ReadonlyArray<Social>;
+    variant?: "inline" | "grid";
+    appearance?: "plain" | "chip";
+    class?: string;
+}
+
+const { items, appearance = "plain", class: cls } = Astro.props;
+const source = items ?? site?.socials ?? [];
+const socials = source.filter(
+    (s): s is Social & { url: string } => typeof s.url === "string",
+);
+
+const itemAppearance =
+    appearance === "chip"
+        ? "rounded-md bg-neutral-200 p-4 text-sm text-neutral-950 transition duration-250 hover:bg-neutral-300 active:scale-95 dark:bg-neutral-700 dark:text-neutral-50 dark:hover:bg-neutral-600"
+        : "";
+---
+
+{
+    socials.length > 0 && (
+        <ul class={cn("flex flex-wrap items-center gap-3", cls)}>
+            {socials.map((s) => (
+                <li class="">
+                    <a
+                        href={s.url}
+                        target="_blank"
+                        rel="me noopener noreferrer"
+                        class={cn(
+                            "group inline-flex items-center gap-2",
+                            itemAppearance,
+                        )}
+                        aria-label={s.label}
+                    >
+                        <Icon name={`fa6-brands:${s.icon}`} class="size-7" />
+                    </a>
+                </li>
+            ))}
+        </ul>
+    )
+}

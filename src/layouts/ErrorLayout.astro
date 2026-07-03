@@ -1,0 +1,26 @@
+---
+import Container from "../components/layouts/Container.astro";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+    title: string;
+    statusCode: number;
+}
+
+const { title, statusCode } = Astro.props;
+---
+
+<BaseLayout {title} description={`错误 ${statusCode}`}>
+    <Container
+        class="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center"
+    >
+        <h1 class="text-9xl font-bold">
+            {statusCode}
+        </h1>
+        <p class="mt-4 text-2xl text-gray-700 dark:text-gray-300">{title}</p>
+
+        <div class="mt-8">
+            <slot />
+        </div>
+    </Container>
+</BaseLayout>

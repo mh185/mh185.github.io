@@ -1,0 +1,174 @@
+---
+import Link from "../ui/link/Link.astro";
+import ThemeIcon from "../ui/ThemeIcon.astro";
+import { header as headerNavLinks, SITE_SETTINGS } from "../../site.config";
+import { Icon } from "astro-icon/components";
+---
+
+<header
+    class="sticky top-0 z-60 border-b border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900"
+>
+    <nav class="mx-auto max-w-350 px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+            <!-- Logo -->
+            <div class="shrink-0">
+                <Link variant="plain" href="/" class="text-xl font-bold"
+                    >{SITE_SETTINGS.title}</Link
+                >
+            </div>
+
+            <!-- Desktop nav links -->
+            <div class="hidden lg:flex lg:items-center lg:space-x-8">
+                {
+                    headerNavLinks.map((item) => (
+                        <Link variant="animated-underline" href={item.url}>
+                            {item.name}
+                        </Link>
+                    ))
+                }
+            </div>
+
+            <!-- Right controls -->
+            <div class="flex items-center gap-x-3 lg:gap-x-6">
+                <a
+                    href="/search"
+                    class="flex items-center rounded-lg p-2 transition-transform duration-250 ease-out active:scale-95 sm:bg-neutral-200 dark:sm:bg-neutral-600"
+                    aria-label="搜索"
+                    data-astro-prefetch="hover"
+                >
+                    <Icon
+                        name="lucide:search"
+                        class="size-6 sm:ml-1 sm:size-5"
+                    />
+                    <span class="hidden pr-4 pl-2 sm:block">搜索...</span>
+                    <kbd
+                        class="hidden rounded-md bg-black px-2 py-0.5 text-neutral-50 sm:block dark:bg-white dark:text-neutral-950"
+                        >&#47;</kbd
+                    >
+                </a>
+
+                <ThemeIcon />
+
+                <!-- Mobile menu toggle  -->
+                <button
+                    type="button"
+                    class="mobile-menu-button relative size-12 hover:text-blue-500 active:scale-95 active:text-blue-500 lg:hidden dark:hover:text-yellow-400 dark:active:text-yellow-400"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                >
+                    <span class="sr-only">打开菜单</span>
+                    <Icon name="lucide:menu" class="icon-menu size-8" />
+                    <Icon name="lucide:x" class="icon-x size-8" />
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div
+            id="mobile-menu"
+            class="pointer-events-none fixed top-16 right-0 bottom-0 left-0 z-50 overflow-auto"
+            data-state="closed"
+        >
+            <div
+                class="pointer-events-auto flex flex-col space-y-1 border-b border-neutral-200 bg-white px-2 pt-2 pb-3 lg:hidden dark:border-neutral-700 dark:bg-neutral-900"
+            >
+                {
+                    headerNavLinks.map((item) => (
+                        <Link
+                            variant="animated-underline"
+                            href={item.url}
+                            class="border-b border-neutral-200 px-4 py-3 text-center text-lg font-medium after:bottom-0! dark:border-neutral-600"
+                        >
+                            {item.name}
+                        </Link>
+                    ))
+                }
+            </div>
+        </div>
+    </nav>
+</header>
+
+<script>
+    const mobileMenuButton = document.querySelector(".mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    if (mobileMenuButton && mobileMenu) {
+        const mediaQuery = window.matchMedia("(min-width: 1024px)");
+
+        const closeMenu = () => {
+            mobileMenu.dataset.state = "closed";
+            mobileMenuButton.setAttribute("aria-expanded", "false");
+            document.dispatchEvent(new CustomEvent("hide-overlay"));
+        };
+
+        const toggleMenu = () => {
+            const currentState = mobileMenu.dataset.state;
+            if (currentState === "closed") {
+                mobileMenu.dataset.state = "open";
+                mobileMenuButton.setAttribute("aria-expanded", "true");
+                document.dispatchEvent(new CustomEvent("show-overlay"));
+            } else {
+                closeMenu();
+            }
+        };
+
+        const handleMediaChange = (e: MediaQueryListEvent) => {
+            if (e.matches) {
+                closeMenu();
+            }
+        };
+
+        mobileMenuButton.addEventListener("click", toggleMenu);
+        document.addEventListener("overlay-clicked", closeMenu);
+        mediaQuery.addEventListener("change", handleMediaChange);
+    }
+</script>
+
+<style>
+    .icon-menu,
+    .icon-x {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition:
+            transform 250ms ease-in-out,
+            opacity 250ms ease-in-out;
+    }
+
+    .icon-menu {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    .icon-x {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-90deg);
+    }
+
+    .mobile-menu-button[aria-expanded="true"] .icon-menu {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .mobile-menu-button[aria-expanded="true"] .icon-x {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    #mobile-menu {
+        transition: all 300ms ease-in-out;
+    }
+
+    #mobile-menu[data-state="closed"] {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-1rem);
+    }
+
+    #mobile-menu[data-state="open"] {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>

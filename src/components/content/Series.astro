@@ -1,0 +1,22 @@
+---
+import { cn } from "../../utils/styles";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    series: string;
+    class?: string;
+}
+
+const { series, class: cls = "" } = Astro.props;
+---
+
+<div class={cn("flex items-center gap-2", cls)}>
+    <Icon name="lucide:link" class="text-gray-700 dark:text-gray-300" />
+    <!-- href={`/search?series=${encodeURIComponent(series)}`} -->
+    <span
+        data-pagefind-filter="series"
+        class="relative inline-block active:scale-95 text-sm font-medium underline underline-offset-4"
+    >
+        {series}
+    </span>
+</div>

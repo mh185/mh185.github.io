@@ -1,0 +1,28 @@
+---
+import type { ContentEntry } from "../../types";
+
+interface Props {
+    direction: "previous" | "next";
+    post: ContentEntry;
+}
+
+const { direction, post } = Astro.props;
+---
+
+<a
+    href={`/${post.collection}/${post.id}`}
+    class="group flex flex-col rounded-lg border border-neutral-200 p-6 transition duration-250 hover:border-blue-500 active:scale-95 dark:border-neutral-700 dark:hover:border-yellow-400"
+>
+    <span class="mb-2 text-sm text-gray-700 dark:text-gray-300">
+        {
+            direction === "previous"
+                ? "← 上一篇"
+                : "下一篇 →"
+        }
+    </span>
+    <span
+        class="text-lg font-medium transition-colors duration-250 group-hover:text-blue-500 dark:group-hover:text-yellow-400"
+    >
+        {post.data.title}
+    </span>
+</a>

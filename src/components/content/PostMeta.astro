@@ -1,0 +1,119 @@
+---
+import { getEntry } from "astro:content";
+import FeaturedTag from "./FeaturedTag.astro";
+import FormattedDate from "./FormattedDate.astro";
+import PostCopyright from "./PostCopyright.astro";
+import Series from "./Series.astro";
+import Tags from "./Tags.astro";
+import Button from "../ui/button/Button.astro";
+import OptimizedImage from "../ui/OptimizedImage.astro";
+import Tooltip from "../ui/Tooltip.astro";
+import { formatDate } from "../../utils/formatDate";
+import type { CldImageProps } from "astro-cloudinary";
+import { Icon } from "astro-icon/components";
+import type { ContentEntry, ImageLoading, WithMeta } from "../../types";
+import { SITE_SETTINGS } from "../../site.config";
+
+interface Props {
+    entry: WithMeta<ContentEntry>;
+    loading?: ImageLoading;
+    fetchpriority?: CldImageProps["fetchpriority"];
+}
+
+const { entry, loading = "eager", fetchpriority = "high" } = Astro.props;
+
+const { data, collection, meta } = entry;
+const { title, pubDate, updatedDate, authors, featured, image, series, tags } =
+    data;
+const { readingTimeText } = meta || {};
+
+const license = data.license ? await getEntry(data.license) : undefined;
+
+const demoUrl = "demoUrl" in data ? data.demoUrl : undefined;
+const repoUrl = "repoUrl" in data ? data.repoUrl : undefined;
+---
+
+<header class="mb-12">
+    {featured && <FeaturedTag />}
+
+    <h1
+        data-pagefind-meta="title"
+        class="mb-6 text-4xl font-bold sm:text-5xl sm:leading-snug"
+    >
+        {title}
+    </h1>
+
+    <div class="flex flex-wrap gap-6 text-gray-700 dark:text-gray-300">
+        <div class="flex items-center gap-2">
+            <Icon name="lucide:user-pen" class="size-5" />
+            <span
+                >{
+                    authors.length > 0
+                        ? authors.join(", ")
+                        : SITE_SETTINGS.owner
+                }</span
+            >
+        </div>
+        <div class="flex items-center gap-2">
+            <Icon name="lucide:calendar" class="size-5" />
+            {
+                updatedDate ? (
+                    <Tooltip
+                        id={`pubdate-${collection}-${entry.id}`}
+                        label={`发布于:${formatDate(pubDate)}`}
+                    >
+                        <span class="cursor-help border-b border-dashed border-current">
+                            更新于:<FormattedDate date={updatedDate} />
+                        </span>
+                    </Tooltip>
+                ) : (
+                    <span>
+                        <FormattedDate date={pubDate} />
+                    </span>
+                )
+            }
+            {
+                readingTimeText && (
+                    <>
+                        <span>&middot;</span>
+                        <span>{readingTimeText}</span>
+                    </>
+                )
+            }
+        </div>
+
+        {license && <PostCopyright {license} />}
+    </div>
+
+    {series && <Series {series} class="mt-6" />}
+    {tags.length > 0 && <Tags {tags} class="mt-6" />}
+
+    {
+        collection === "projects" && (demoUrl || repoUrl) && (
+            <div class="mt-6 flex gap-4">
+                {demoUrl && (
+                    <Button href={demoUrl} class="gap-2">
+                        <Icon name="lucide:eye" class="size-5" />
+                        在线演示
+                    </Button>
+                )}
+                {repoUrl && (
+                    <Button intent={"secondary"} href={repoUrl} class="gap-2">
+                        <Icon name="lucide:github" class="size-5" />
+                        查看源码
+                    </Button>
+                )}
+            </div>
+        )
+    }
+
+    <OptimizedImage
+        data-pagefind-meta="image[src], image_alt[alt]"
+        src={image.src}
+        alt={image.alt}
+        {loading}
+        {fetchpriority}
+        wrapperClass="mt-6 aspect-video rounded-xl"
+        imageClass="transition duration-250 ease-out group-hover:scale-105 group-active:scale-105"
+    />
+</header>

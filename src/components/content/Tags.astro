@@ -1,0 +1,21 @@
+---
+import { cn } from "../../utils/styles";
+
+interface Props {
+    tags: string[];
+    class?: string;
+}
+
+const { tags, class: cls = "" } = Astro.props;
+---
+
+<div class={cn("flex flex-wrap gap-2", cls)}>
+    {
+        tags.map((tag) => (
+            // href={`/search?tags=${encodeURIComponent(tag)}`}
+            <span class="rounded-md bg-neutral-200 px-2 py-1 text-sm text-neutral-950 dark:bg-neutral-700 dark:text-neutral-50">
+                {tag}
+            </span>
+        ))
+    }
+</div>

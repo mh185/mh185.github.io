@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from "astro:content";
+import Container from "../components/layouts/Container.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
+import SocialLinks from "../components/ui/SocialLinks.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Prose from "../components/content/Prose.astro";
+
+const [about] = await getCollection("about");
+
+const { Content } = await render(about);
+---
+
+<BaseLayout
+    title={about.data.title}
+    description={about.data.description}
+    ogImage="https://res.cloudinary.com/dellp9a4z/image/upload/v1756758384/og-about_gl5gyr.png"
+>
+    <Container class="mx-auto max-w-4xl py-12">
+        <PageTitle title="关于我" />
+
+        <Prose class:list={"mt-16"}>
+            <Content />
+        </Prose>
+
+        <div class="mt-12 px-4 sm:px-6 md:px-0">
+            <h2 class="text-2xl font-bold">与我联系</h2>
+            <p class="mt-2 text-gray-700 dark:text-gray-300">
+                你可以在以下平台找到我。
+            </p>
+
+            <SocialLinks class="mt-6" appearance={"chip"} />
+        </div>
+    </Container>
+</BaseLayout>

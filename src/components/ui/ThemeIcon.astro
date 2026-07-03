@@ -1,0 +1,79 @@
+<button
+    id="themeToggle"
+    type="button"
+    class="flex size-12 cursor-pointer items-center justify-center transition-all duration-200 ease-out hover:text-blue-500 active:scale-95 active:text-blue-500 lg:size-auto dark:hover:text-yellow-400 dark:active:text-yellow-400"
+    aria-label="Toggle theme"
+>
+    <svg width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+            class="sun"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            ><circle cx="12" cy="12" r="4"></circle><path
+                d="M12 3v1m0 16v1m-9-9h1m16 0h1m-2.636-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707"
+            ></path></g
+        >
+        <path
+            class="moon dark:fill-accent-dark"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9"></path>
+    </svg>
+</button>
+
+<script is:inline>
+    const themeToggle = () => {
+        const el = document.documentElement;
+        const isDark = !el.classList.contains("dark");
+        el.classList.toggle("dark", isDark);
+        try {
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        } catch (_) {}
+    };
+
+    document
+        .getElementById("themeToggle")
+        ?.addEventListener("click", themeToggle);
+</script>
+
+<style>
+    #themeToggle {
+        border: 0;
+        background: none;
+    }
+
+    .sun,
+    .moon {
+        transform-origin: center;
+        transition:
+            transform 300ms ease-in-out,
+            opacity 250ms ease-in-out;
+    }
+
+    .sun {
+        stroke: currentColor;
+        fill: none;
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+
+    .moon {
+        fill: transparent;
+        stroke: none;
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.5);
+    }
+
+    :global(.dark) .sun {
+        opacity: 0;
+        transform: rotate(90deg) scale(0.5);
+    }
+
+    :global(.dark) .moon {
+        fill: currentColor;
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+</style>

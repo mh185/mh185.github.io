@@ -1,0 +1,18 @@
+---
+import { getCollection } from "astro:content";
+import PostLayout from "../../layouts/PostLayout.astro";
+import { attachMeta } from "../../utils/meta";
+
+export async function getStaticPaths() {
+    const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+    return posts.map((post) => ({
+        params: { id: post.id },
+        props: { post: attachMeta(post) },
+    }));
+}
+
+const { post } = Astro.props;
+---
+
+<PostLayout entry={post} />

@@ -1,0 +1,27 @@
+---
+import { type LinkVariants, link } from "./link";
+import { cn } from "../../../utils/styles";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a">, LinkVariants {}
+
+const { href, class: cls, target, rel, variant, ...rest } = Astro.props;
+
+const isExternal =
+    href instanceof URL ||
+    (typeof href === "string" &&
+        (href.startsWith("http://") || href.startsWith("https://")));
+
+const computedTarget = target ?? (isExternal ? "_blank" : undefined);
+const computedRel = rel ?? (isExternal ? "noopener noreferrer" : undefined);
+---
+
+<a
+    {href}
+    target={computedTarget}
+    rel={computedRel}
+    class={cn(link({ variant }), cls)}
+    {...rest}
+>
+    <slot />
+</a>

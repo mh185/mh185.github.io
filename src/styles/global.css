@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+    scrollbar-gutter: stable;
+}
+
+html.overlay-open {
+    overflow: hidden;
+}
+
+@supports not (scrollbar-gutter: stable) {
+    html.overlay-open {
+        padding-right: var(--sbw, 0px);
+    }
+}
+
+#overlay {
+    touch-action: none;
+}
+
+body {
+    font-family:
+        var(--font-inter),
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+}
+
+code,
+kbd {
+    font-family:
+        var(--font-jet-brains-mono), Monaco, Consolas, "Ubuntu Mono", monospace !important;
+}
+
+@media (min-width: 1540px) {
+    #scroll-to-top-button,
+    #open-toc-button {
+        right: clamp(
+            1.5rem,
+            calc((100vw - 72rem) / 2),
+            calc((100vw - 1496px) / 2)
+        );
+    }
+}
+
+article :where(h2, h3, h4) {
+    scroll-margin-top: calc(4rem + 0.75rem);
+}
+
+.turnstile-container-collapsed {
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+}
+
+.medium-zoom-overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(0, 0, 0, 0.9) !important;
+    transition: opacity 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+.medium-zoom-overlay,
+.medium-zoom-image--opened {
+    position: fixed;
+    z-index: 999;
+}
+
+.medium-zoom-image {
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
+    cursor: zoom-in;
+}
+
+.medium-zoom-overlay {
+    transition: opacity 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+img.no-zoom {
+    cursor: default;
+}
+
+/* Post styling */
+.prose a:not(.anchor) {
+    @apply inline-block text-blue-600 underline decoration-transparent transition-all duration-250 ease-out hover:decoration-current active:scale-95 dark:text-yellow-400;
+}
+
+.prose .anchor {
+    @apply relative inline-block text-inherit decoration-transparent transition-all duration-250 ease-out hover:text-blue-500 hover:decoration-current active:scale-95 dark:hover:text-yellow-400;
+}
+
+.prose .anchor::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: -7px;
+    bottom: -10px;
+    left: -7px;
+}
+
+.prose {
+    --prose-decoration-color: oklch(44.6% 0.03 256.802);
+    --tw-prose-bullets: var(--prose-decoration-color);
+    --tw-prose-counters: var(--prose-decoration-color);
+    --tw-prose-quote-borders: var(--prose-decoration-color);
+    --tw-prose-hr: var(--prose-decoration-color);
+    --tw-prose-th-borders: var(--prose-decoration-color);
+    --tw-prose-td-borders: var(--prose-decoration-color);
+}
+
+.dark .prose {
+    --prose-decoration-color: oklch(70.7% 0.022 261.325);
+}
+
+.prose :where(code):not(:where(pre *)) {
+    @apply mx-0.5 rounded-md bg-neutral-700 px-1.5 py-1 font-mono text-sm text-neutral-50 dark:bg-neutral-200 dark:text-neutral-950;
+}
+
+.prose kbd {
+    @apply inline-block rounded-md border border-b-2 px-1.5 py-0.5 align-middle font-mono text-sm font-semibold;
+    @apply border-neutral-300 bg-neutral-100 text-neutral-950 dark:border-neutral-500 dark:bg-neutral-700 dark:text-neutral-50;
+}
+
+.prose :where(code):not(:where(pre *)),
+.prose .kbd {
+    font-weight: 400;
+}
+
+.dark .prose :where(code):not(:where(pre *)),
+.dark .prose .kbd {
+    font-weight: 600;
+}
+
+.prose mark {
+    @apply rounded-md bg-blue-500/30 px-1 py-0.5 text-blue-900 dark:bg-yellow-400/30 dark:text-yellow-100;
+}
+
+/* TOC styling */
+/* Active link styling */
+.toc-item-wrapper.is-active > a {
+    @apply font-semibold text-blue-600 dark:text-yellow-400;
+}
+
+/* Read link styling */
+.toc-item-wrapper.is-read > a {
+    @apply text-gray-500 dark:text-neutral-400;
+}
+
+.toc-item-wrapper.is-read > a:hover {
+    @apply text-blue-500 dark:text-yellow-400;
+}
+
+/* Active section background highlight */
+.toc-item-wrapper.is-active,
+.toc-item-wrapper.has-active-child {
+    @apply bg-blue-500/10 dark:bg-yellow-400/10;
+}
+
+.toc-item-wrapper[data-depth="3"].is-active,
+.toc-item-wrapper[data-depth="4"].is-active {
+    @apply bg-transparent;
+}
+
+/* Layout adjustments for heading depth */
+.toc-item-wrapper[data-depth="2"] {
+    @apply mb-1 rounded-lg;
+}
+.toc-item-wrapper[data-depth="3"] {
+    @apply mx-4 rounded-md;
+}

@@ -1,0 +1,160 @@
+---
+import OptimizedImage from "../ui/OptimizedImage.astro";
+import type { CldImageProps } from "astro-cloudinary";
+import { cva, type VariantProps } from "class-variance-authority";
+import type { ContentEntry, ImageLoading } from "../../types";
+
+const card = cva(
+    "relative items-center p-1 flex justify-center overflow-hidden group rounded-xl",
+    {
+        variants: {
+            size: {
+                large: "aspect-video md:aspect-auto h-full",
+                small: "aspect-video",
+                full: "aspect-[2/1] w-full max-h-[550px]",
+            },
+        },
+        defaultVariants: { size: "small" },
+    },
+);
+
+const heading = cva("font-bold text-white sm:mb-2", {
+    variants: {
+        size: {
+            large: "text-lg sm:text-2xl md:text-3xl",
+            small: "text-lg sm:text-2xl md:text-xl",
+            full: "text-lg sm:text-2xl md:text-3xl",
+        },
+    },
+});
+
+const text = cva("text-gray-200", {
+    variants: {
+        size: {
+            large: "hidden sm:line-clamp-2 lg:line-clamp-3 sm:text-base lg:text-lg",
+            small: "hidden sm:line-clamp-2 sm:text-sm",
+            full: "hidden sm:line-clamp-2 lg:line-clamp-3 sm:text-base lg:text-lg",
+        },
+    },
+});
+
+const textBox = cva(
+    "absolute inset-x-0 bottom-0 m-2 md:m-2.5 z-20 rounded-lg md:rounded-lg bg-black/75",
+    {
+        variants: {
+            size: {
+                large: "px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-4",
+                small: "px-3 py-2 sm:px-4 sm:py-2.5",
+                full: "px-3 py-2 sm:px-6 sm:py-4",
+            },
+        },
+    },
+);
+
+interface Props extends VariantProps<typeof card> {
+    entry: ContentEntry;
+    loading?: ImageLoading;
+    fetchpriority?: CldImageProps["fetchpriority"];
+}
+
+const { entry, size, loading = "lazy", fetchpriority } = Astro.props;
+
+const { collection, id, data } = entry;
+const { title, description, image } = data;
+---
+
+<a
+    href={`/${collection}/${id}`}
+    class={`${card({ size })} card-hover-effect card-size-${size}`}
+>
+    <OptimizedImage
+        src={image.src}
+        alt={image.alt}
+        width={1600}
+        height={900}
+        loading={loading}
+        fetchpriority={fetchpriority}
+        wrapperClass="h-full w-full z-10 rounded-[0.625rem]"
+        imageClass="block transform-gpu will-change-transform backface-hidden transition-transform duration-500 ease-out group-hover:scale-105"
+    />
+
+    <span
+        class="absolute top-0 left-0 z-50 m-2 inline-block rounded-md bg-black/70 px-3 py-1.5 text-xs font-medium text-white capitalize sm:text-sm md:m-2.5"
+    >
+        {collection === "projects" ? "项目" : "博客"}
+    </span>
+
+    <div class={textBox({ size })}>
+        <h3 class:list={["line-clamp-1", heading({ size })]}>{title}</h3>
+        <p class:list={text({ size })}>{description}</p>
+    </div>
+</a>
+
+<style>
+    .card-hover-effect {
+        contain: paint;
+    }
+
+    .card-hover-effect::before {
+        content: "";
+        position: absolute;
+        background-color: #3b82f6;
+        width: clamp(120px, 40vw, 300px);
+        height: clamp(160%, 200vw, 250%);
+        transform-origin: center center;
+        opacity: 0;
+        animation: rotate 5s linear infinite;
+        animation-play-state: paused;
+        will-change: transform, opacity;
+        pointer-events: none;
+        transform: translateZ(0);
+        transition: opacity 0.225s cubic-bezier(0, 0, 0.58, 1);
+        z-index: 0;
+    }
+
+    .card-hover-effect:hover::before {
+        animation-play-state: running;
+        opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .card-hover-effect::before {
+            animation: none;
+        }
+    }
+
+    .card-hover-effect.card-size-small::before {
+        width: 150px;
+    }
+
+    :global(.dark) .card-hover-effect::before {
+        background-color: #fbbf24;
+    }
+
+    .card-hover-effect::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.225s cubic-bezier(0, 0, 0.58, 1);
+        z-index: -1;
+    }
+
+    :global(.dark) .card-hover-effect::after {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .card-hover-effect:hover::after {
+        opacity: 1;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>

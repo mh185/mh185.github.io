@@ -1,0 +1,45 @@
+---
+interface Props {
+    id: string;
+    label: string;
+}
+const { id, label } = Astro.props;
+---
+
+<span class="tooltip-wrapper">
+    <slot />
+
+    <span role="tooltip" id={id} class="tooltip-bubble">
+        {label}
+    </span>
+</span>
+
+<style>
+    .tooltip-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip-bubble {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 125%;
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease-in-out;
+        z-index: 10;
+    }
+
+    .tooltip-wrapper:focus-within .tooltip-bubble,
+    .tooltip-wrapper:hover .tooltip-bubble {
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>

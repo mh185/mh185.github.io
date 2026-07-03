@@ -1,0 +1,135 @@
+---
+import { generateToc, type TocOptions } from "../../../utils/toc";
+import type { MarkdownHeading } from "astro";
+import { Icon } from "astro-icon/components";
+import ToCHeading from "./ToCHeading.astro";
+
+interface Props {
+    headings: MarkdownHeading[];
+    options?: TocOptions;
+}
+
+const { headings, options } = Astro.props;
+const toc = generateToc(headings, options);
+
+if (toc.length === 0) return null;
+---
+
+<toc-sidebar>
+    <aside
+        id="toc-sidebar"
+        class="fixed top-16 right-0 z-50 h-[calc(100vh-4rem)] w-full max-w-xs translate-x-full overflow-y-auto bg-white p-8 shadow-xl transition-transform duration-300 ease-in-out sm:w-80 lg:w-96 dark:bg-neutral-800"
+    >
+        <nav id="toc">
+            <div class="mb-4 flex items-center justify-between">
+                <h2
+                    class="text-lg font-semibold tracking-wider text-neutral-900 uppercase dark:text-white"
+                >
+                    目录
+                </h2>
+                <button
+                    id="close-toc-button"
+                    aria-label="关闭目录"
+                    class="relative inline-block cursor-pointer rounded-full text-neutral-600 transition duration-250 ease-out before:absolute before:-inset-x-1.75 before:-inset-y-2.5 before:content-[''] hover:text-blue-500 active:scale-95 dark:text-neutral-400 dark:hover:text-yellow-400"
+                >
+                    <Icon name="lucide:x" class="size-6" />
+                </button>
+            </div>
+            <ul>
+                {toc.map((heading) => <ToCHeading heading={heading} />)}
+            </ul>
+        </nav>
+    </aside>
+</toc-sidebar>
+
+<script>
+    class TocSidebar extends HTMLElement {
+        articleHeadings: HTMLElement[] = [];
+        tocLinkWrappers: HTMLElement[] = [];
+        activeHeadingIndex = -1;
+        ticking = false;
+        headerH = 64;
+
+        constructor() {
+            super();
+        }
+
+        updateActiveLink = () => {
+            let currentBestIndex = -1;
+
+            const triggerLine = window.innerHeight * 0.2 + this.headerH;
+
+            for (let i = 0; i < this.articleHeadings.length; i++) {
+                const rect = this.articleHeadings[i].getBoundingClientRect();
+                if (rect.top <= triggerLine) {
+                    currentBestIndex = i;
+                }
+            }
+
+            if (currentBestIndex !== this.activeHeadingIndex) {
+                this.tocLinkWrappers.forEach((wrapper, index) => {
+                    wrapper.classList.remove(
+                        "is-active",
+                        "is-read",
+                        "has-active-child",
+                    );
+
+                    if (index < currentBestIndex) {
+                        wrapper.classList.add("is-read");
+                    } else if (index === currentBestIndex) {
+                        wrapper.classList.add("is-active");
+                    }
+                });
+
+                this.tocLinkWrappers.forEach((wrapper) => {
+                    if (wrapper.querySelector(".is-active")) {
+                        wrapper.classList.add("has-active-child");
+                    }
+                });
+
+                this.activeHeadingIndex = currentBestIndex;
+            }
+        };
+
+        onScroll = () => {
+            if (!this.ticking) {
+                window.requestAnimationFrame(() => {
+                    this.updateActiveLink();
+                    this.ticking = false;
+                });
+                this.ticking = true;
+            }
+        };
+
+        connectedCallback() {
+            const header = document.querySelector("header");
+            if (header) {
+                this.headerH = header.getBoundingClientRect().height;
+            }
+
+            this.articleHeadings = Array.from(
+                document.querySelectorAll("article h2, article h3, article h4"),
+            );
+            this.tocLinkWrappers = Array.from(
+                this.querySelectorAll(".toc-item-wrapper"),
+            );
+
+            if (
+                this.articleHeadings.length === 0 ||
+                this.tocLinkWrappers.length === 0
+            )
+                return;
+
+            this.updateActiveLink();
+            document.addEventListener("scroll", this.onScroll, {
+                passive: true,
+            });
+        }
+
+        disconnectedCallback() {
+            document.removeEventListener("scroll", this.onScroll);
+        }
+    }
+
+    customElements.define("toc-sidebar", TocSidebar);
+</script>

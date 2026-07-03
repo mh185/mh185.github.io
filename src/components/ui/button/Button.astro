@@ -1,0 +1,38 @@
+---
+import { type ButtonVariants, button } from "./button";
+import { cn } from "../../../utils/styles";
+import type { HTMLAttributes } from "astro/types";
+import Link from "../link/Link.astro";
+
+interface AnchorProps extends HTMLAttributes<"a">, ButtonVariants {
+    href: string;
+}
+
+interface ButtonProps extends HTMLAttributes<"button">, ButtonVariants {
+    href?: undefined;
+}
+
+type Props = AnchorProps | ButtonProps;
+
+const { intent, class: cls = "", href, ...rest } = Astro.props;
+---
+
+{
+    href ? (
+        <Link
+            variant="unstyled"
+            {href}
+            class={cn(button({ intent }), cls)}
+            {...(rest as HTMLAttributes<"a">)}
+        >
+            <slot />
+        </Link>
+    ) : (
+        <button
+            class={cn(button({ intent }), cls)}
+            {...(rest as HTMLAttributes<"button">)}
+        >
+            <slot />
+        </button>
+    )
+}

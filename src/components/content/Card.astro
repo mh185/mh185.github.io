@@ -1,0 +1,77 @@
+---
+import OptimizedImage from "../ui/OptimizedImage.astro";
+import type { ContentEntry, ImageLoading, WithMeta } from "../../types";
+import FeaturedTag from "./FeaturedTag.astro";
+import FormattedDate from "./FormattedDate.astro";
+import Series from "./Series.astro";
+import Tags from "./Tags.astro";
+
+interface Props {
+    entry: WithMeta<ContentEntry>;
+    loading?: ImageLoading;
+}
+const { entry, loading = "lazy" } = Astro.props;
+
+const { collection, id, data, meta } = entry;
+const {
+    title,
+    description,
+    pubDate,
+    updatedDate,
+    image,
+    featured,
+    series,
+    tags,
+} = data;
+const { readingTimeText } = meta || {};
+
+const displayDate = updatedDate ?? pubDate;
+---
+
+<article class="group relative flex flex-col">
+    {featured && <FeaturedTag class="absolute top-1 left-1 z-10" />}
+
+    <OptimizedImage
+        src={image.src}
+        alt={image.alt}
+        width={1600}
+        height={900}
+        sizes="(max-width: 768px) 100vw, 33vw"
+        loading={loading}
+        wrapperClass="mb-4 aspect-video rounded-lg"
+        imageClass="transition duration-250 ease-out group-hover:scale-105 group-active:scale-105"
+    />
+
+    <h3
+        class="mb-2 line-clamp-2 text-xl font-semibold transition-colors duration-250 ease-out group-hover:text-blue-500 group-active:text-blue-500 dark:group-hover:text-yellow-400 dark:group-active:text-yellow-400"
+    >
+        <a
+            href={`/${collection}/${id}`}
+            class="after:absolute after:inset-0 after:content-['']"
+        >
+            {title}
+        </a>
+    </h3>
+    <p class="line-clamp-3 text-gray-700 dark:text-gray-300">
+        {description}
+    </p>
+
+    <div class="mt-3.5 flex flex-col items-start gap-y-4">
+        {series && <Series {series} class="relative z-10" />}
+        {tags.length > 0 && <Tags {tags} class="relative z-10" />}
+
+        <div
+            class="flex items-center gap-x-2 text-sm text-gray-700 dark:text-gray-300"
+        >
+            <FormattedDate date={displayDate} />
+            {
+                readingTimeText && (
+                    <>
+                        <span>&middot;</span>
+                        <span>{readingTimeText}</span>
+                    </>
+                )
+            }
+        </div>
+    </div>
+</article>

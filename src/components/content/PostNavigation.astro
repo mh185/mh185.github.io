@@ -1,0 +1,29 @@
+---
+import type { ContentEntry } from "../../types";
+import PostNavigationLink from "./PostNavigationLink.astro";
+
+interface Props {
+    prevPost?: ContentEntry;
+    nextPost?: ContentEntry;
+}
+
+const { prevPost, nextPost } = Astro.props;
+---
+
+{
+    (prevPost || nextPost) && (
+        <nav class="mt-12 pt-6">
+            <div class="flex flex-col-reverse gap-6 md:grid md:grid-cols-2">
+                {prevPost ? (
+                    <PostNavigationLink direction="previous" post={prevPost} />
+                ) : (
+                    <div />
+                )}
+
+                {nextPost && (
+                    <PostNavigationLink direction="next" post={nextPost} />
+                )}
+            </div>
+        </nav>
+    )
+}

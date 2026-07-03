@@ -1,0 +1,48 @@
+---
+import { Icon } from "astro-icon/components";
+import Button from "./button/Button.astro";
+
+interface Props {
+    threshold?: number;
+}
+
+const { threshold = 512 } = Astro.props;
+---
+
+<div
+    id="scroll-marker"
+    class="absolute"
+    style={`top: ${threshold}px;`}
+    role="presentation"
+>
+</div>
+
+<Button
+    id="scroll-to-top-button"
+    aria-label="返回顶部"
+    class="pointer-events-none invisible fixed right-6 bottom-6 z-40 size-12 rounded-full! opacity-0"
+>
+    <Icon name="lucide:arrow-up" class="size-6" />
+</Button>
+
+<script>
+    const marker = document.querySelector("#scroll-marker");
+    const button = document.querySelector("#scroll-to-top-button");
+
+    if (marker && button) {
+        const observer = new IntersectionObserver(([entry]) => {
+            const shouldHide = entry.isIntersecting;
+            button.classList.toggle("opacity-0", shouldHide);
+            button.classList.toggle("invisible", shouldHide);
+            button.classList.toggle("pointer-events-none", shouldHide);
+        });
+
+        observer.observe(marker);
+
+        const handler = () => {
+            window.scrollTo(0, 0);
+        };
+
+        button.addEventListener("click", handler);
+    }
+</script>

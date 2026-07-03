@@ -1,0 +1,42 @@
+---
+import "../styles/search.css";
+
+import Container from "../components/layouts/Container.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PagefindSearch from "astro-pagefind/components/Search";
+---
+
+<BaseLayout
+    title="搜索"
+    description="搜索本站的文章和项目。"
+    ogImage="https://res.cloudinary.com/dellp9a4z/image/upload/v1756758390/og-search_t1fak7.png"
+>
+    <Container class="py-12">
+        <PageTitle title="搜索" />
+
+        <PagefindSearch
+            id="search"
+            className="pagefind-ui"
+            uiOptions={{
+                showSubResults: true,
+                autofocus: true,
+                translations: {
+                    placeholder: "搜索文章和项目",
+                    clear_search: "清除",
+                    load_more: "加载更多结果",
+                    search_label: "搜索本站",
+                    filters_label: "筛选",
+                    zero_results: "没有找到与 [SEARCH_TERM] 相关的结果",
+                    many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
+                    one_result: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
+                    alt_search:
+                        "没有找到 [SEARCH_TERM] 的结果,以下是 [DIFFERENT_TERM] 的结果",
+                    search_suggestion:
+                        "没有找到 [SEARCH_TERM] 的结果,可以试试以下搜索",
+                    searching: "正在搜索 [SEARCH_TERM]…",
+                },
+            }}
+        />
+    </Container>
+</BaseLayout>
