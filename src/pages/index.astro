@@ -1,13 +1,20 @@
 ---
 import { getCollection } from "astro:content";
+import RankingList from "../components/content/RankingList.astro";
+import TopicCard from "../components/content/TopicCard.astro";
 import Container from "../components/layouts/Container.astro";
 import ContentGrid from "../components/layouts/sections/ContentGrid.astro";
 import FeaturedContent from "../components/layouts/sections/FeaturedContent.astro";
 import EmptyState from "../components/ui/EmptyState.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+    byScoreDesc,
+    getTopicEntries,
+    tagSlug,
+    topicGroups,
+} from "../utils/contentEnhancements";
 import { attachMeta } from "../utils/meta";
 
-// 首页汇总所有栏目的内容
 const [travel, movies, tv] = await Promise.all([
     getCollection("travel", ({ data }) => !data.draft),
     getCollection("movies", ({ data }) => !data.draft),
@@ -16,11 +23,11 @@ const [travel, movies, tv] = await Promise.all([
 
 const all = [...travel, ...movies, ...tv];
 
-const sorted = all.sort(
+const sorted = [...all].sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-const featured = all
+const featured = [...all]
     .filter((item) => item.data.featured !== undefined)
     .sort((a, b) => (a.data.featured ?? 0) - (b.data.featured ?? 0));
 
@@ -30,6 +37,17 @@ const latest = sorted
     .filter((p) => !featuredKeys.has(`${p.collection}/${p.id}`))
     .slice(0, 6)
     .map((p) => attachMeta(p));
+
+const topicPreview = topicGroups.slice(0, 4);
+const travelTop = [...travel].sort(byScoreDesc).slice(0, 6).map((p) => attachMeta(p));
+const movieTop = [...movies].sort(byScoreDesc).slice(0, 6).map((p) => attachMeta(p));
+const tvTop = [...tv].sort(byScoreDesc).slice(0, 6).map((p) => attachMeta(p));
+const rankingPreview = [...all].sort(byScoreDesc).slice(0, 10).map((p) => attachMeta(p));
+const quickTags = [
+    ["5A 景区", "5A景区"],
+    ["高分电影", "高分电影"],
+    ["科幻剧", "科幻剧"],
+];
 
 const hasContent = featured.length > 0 || latest.length > 0;
 ---
@@ -49,11 +67,59 @@ const hasContent = featured.length > 0 || latest.length > 0;
                             <ContentGrid items={latest} />
                         </section>
                     )}
+
+                    <section>
+                        <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <h2 class="text-3xl font-bold">专题合集</h2>
+                                <p class="mt-2 text-neutral-600 dark:text-neutral-400">
+                                    把文章按旅行、补片、追剧场景重新整理。
+                                </p>
+                            </div>
+                            <a href="/topics" class="text-sm font-semibold hover:underline">查看全部专题</a>
+                        </div>
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                            {
+                                topicPreview.map((topic) => (
+                                    <TopicCard
+                                        title={topic.title}
+                                        description={topic.description}
+                                        href={`/topics/${topic.id}`}
+                                        items={getTopicEntries(all, topic.id)
+                                            .slice(0, 6)
+                                            .map((entry) => attachMeta(entry))}
+                                    />
+                                ))
+                            }
+                        </div>
+                    </section>
+
+                    <ContentGrid title="热门旅游" href="/travel" viewAllText="全部旅游" items={travelTop} />
+                    <ContentGrid title="高分电影" href="/movies" viewAllText="全部电影" items={movieTop} />
+                    <ContentGrid title="热门电视剧" href="/tv" viewAllText="全部电视剧" items={tvTop} />
+
+                    <RankingList
+                        title="综合热门 Top 10"
+                        description="从旅游、电影、电视剧中挑出最适合作为入口的内容。"
+                        items={rankingPreview}
+                    />
+
+                    <section class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
+                        <h2 class="text-2xl font-bold">快速入口</h2>
+                        <div class="mt-5 flex flex-wrap gap-3">
+                            <a href="/rankings" class="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white dark:bg-neutral-100 dark:text-black">排行榜</a>
+                            <a href="/topics" class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">专题合集</a>
+                            <a href="/tags" class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">标签索引</a>
+                            {quickTags.map(([label, tag]) => (
+                                <a href={`/tags/${tagSlug(tag)}`} class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">{label}</a>
+                            ))}
+                        </div>
+                    </section>
                 </>
             ) : (
                 <EmptyState
-                    title="这里还什么都没有…"
-                    message="很快会有新内容,欢迎稍后再来!"
+                    title="这里还没有内容"
+                    message="很快会有新内容, 欢迎稍后再来!"
                 />
             )
         }

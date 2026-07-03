@@ -1,0 +1,31 @@
+---
+import { getInfoItems } from "../../utils/contentEnhancements";
+import type { ContentEntry } from "../../types";
+
+interface Props {
+    entry: ContentEntry;
+}
+
+const { entry } = Astro.props;
+const items = getInfoItems(entry);
+
+const titleMap = {
+    travel: "实用信息",
+    movies: "观看建议",
+    tv: "追剧建议",
+};
+---
+
+<aside class="not-prose my-8 rounded-xl border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-800 dark:bg-neutral-900/70">
+    <h2 class="mb-4 text-lg font-semibold">{titleMap[entry.collection]}</h2>
+    <dl class="grid gap-3 sm:grid-cols-2">
+        {
+            items.map(([label, value]) => (
+                <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-neutral-950">
+                    <dt class="text-sm text-neutral-500 dark:text-neutral-400">{label}</dt>
+                    <dd class="mt-1 text-sm font-medium leading-6">{value}</dd>
+                </div>
+            ))
+        }
+    </dl>
+</aside>

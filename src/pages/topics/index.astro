@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import TopicCard from "../../components/content/TopicCard.astro";
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getTopicEntries, topicGroups } from "../../utils/contentEnhancements";
+import { attachMeta } from "../../utils/meta";
+
+const collections = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+const entries = collections.flat();
+---
+
+<BaseLayout title="专题合集" description="把旅游、电影和电视剧按主题重新整理, 更适合收藏和连续浏览。">
+    <Container class="py-12">
+        <PageTitle title="专题合集" />
+        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            把零散文章串成可直接使用的清单: 国内 5A 景区、周末旅行、高分电影、动画片单、假期刷剧和科幻悬疑。
+        </p>
+        <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {
+                topicGroups.map((topic) => (
+                    <TopicCard
+                        title={topic.title}
+                        description={topic.description}
+                        href={`/topics/${topic.id}`}
+                        items={getTopicEntries(entries, topic.id).slice(0, 6).map((entry) => attachMeta(entry))}
+                    />
+                ))
+            }
+        </div>
+    </Container>
+</BaseLayout>

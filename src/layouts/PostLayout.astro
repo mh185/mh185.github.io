@@ -1,14 +1,18 @@
 ---
 import { getCollection, render } from "astro:content";
 import Article from "../components/content/Article.astro";
+import InfoPanel from "../components/content/InfoPanel.astro";
 import PostMeta from "../components/content/PostMeta.astro";
 import PostNavigation from "../components/content/PostNavigation.astro";
 import Prose from "../components/content/Prose.astro";
+import RelatedContent from "../components/content/RelatedContent.astro";
 import ToC from "../components/content/ToC/ToC.astro";
 import MediumZoom from "../components/integrations/MediumZoom.astro";
 import { Icon } from "astro-icon/components";
 import type { ContentEntry, WithMeta } from "../types";
 import BaseLayout from "./BaseLayout.astro";
+import { getRelatedEntries } from "../utils/contentEnhancements";
+import { attachMeta } from "../utils/meta";
 
 interface Props {
     entry: WithMeta<ContentEntry>;
@@ -23,6 +27,11 @@ const allPostsInCollection = await getCollection(entry.collection);
 const postIndex = allPostsInCollection.findIndex((e) => e.id === entry.id);
 const prevPost = allPostsInCollection[postIndex + 1];
 const nextPost = allPostsInCollection[postIndex - 1];
+const relatedPosts = getRelatedEntries(
+    entry,
+    allPostsInCollection as ContentEntry[],
+    6,
+).map((post) => attachMeta(post));
 ---
 
 <BaseLayout
@@ -56,11 +65,14 @@ const nextPost = allPostsInCollection[postIndex - 1];
             <!-- Header -->
             <PostMeta {entry} />
 
+            <InfoPanel {entry} />
+
             <!-- Content -->
             <Prose>
                 <Content />
             </Prose>
         </div>
+        <RelatedContent items={relatedPosts} />
         <!-- Post Navigation -->
         <PostNavigation {prevPost} {nextPost} />
     </Article>

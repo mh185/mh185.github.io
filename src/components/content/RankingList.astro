@@ -1,0 +1,47 @@
+---
+import { collectionLabels, entryUrl } from "../../utils/contentEnhancements";
+import type { ContentEntry, WithMeta } from "../../types";
+
+interface Props {
+    title: string;
+    description?: string;
+    items: WithMeta<ContentEntry>[];
+}
+
+const { title, description, items } = Astro.props;
+---
+
+<section>
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold">{title}</h2>
+        {description && <p class="mt-2 text-neutral-600 dark:text-neutral-400">{description}</p>}
+    </div>
+    <div class="divide-y divide-neutral-200 rounded-xl border border-neutral-200 dark:divide-neutral-800 dark:border-neutral-800">
+        {
+            items.map((entry, index) => (
+                <a href={entryUrl(entry)} class="group grid grid-cols-[auto_88px_1fr] gap-4 p-4 transition hover:bg-neutral-50 dark:hover:bg-neutral-900 sm:grid-cols-[auto_120px_1fr]">
+                    <div class="pt-1 text-2xl font-bold text-neutral-400 tabular-nums">
+                        {String(index + 1).padStart(2, "0")}
+                    </div>
+                    <img
+                        src={entry.data.image.src}
+                        alt={entry.data.image.alt ?? entry.data.title}
+                        loading="lazy"
+                        class="aspect-[4/3] w-full rounded-lg object-cover"
+                    />
+                    <div class="min-w-0">
+                        <div class="mb-2 text-xs font-medium text-neutral-500">
+                            {collectionLabels[entry.collection]}
+                        </div>
+                        <h3 class="line-clamp-2 font-semibold group-hover:underline">
+                            {entry.data.title}
+                        </h3>
+                        <p class="mt-2 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-400">
+                            {entry.data.description}
+                        </p>
+                    </div>
+                </a>
+            ))
+        }
+    </div>
+</section>

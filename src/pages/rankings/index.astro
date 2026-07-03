@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import RankingList from "../../components/content/RankingList.astro";
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { byScoreDesc } from "../../utils/contentEnhancements";
+import { attachMeta } from "../../utils/meta";
+
+const [travel, movies, tv] = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+
+const travelTop = travel.sort(byScoreDesc).slice(0, 20).map((entry) => attachMeta(entry));
+const movieTop = movies.sort(byScoreDesc).slice(0, 20).map((entry) => attachMeta(entry));
+const tvTop = tv.sort(byScoreDesc).slice(0, 20).map((entry) => attachMeta(entry));
+---
+
+<BaseLayout title="热门排行榜" description="旅游、电影和电视剧的高优先级推荐排行, 方便快速挑选。">
+    <Container class="space-y-14 py-12">
+        <PageTitle title="热门排行榜" />
+        <p class="max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            排行综合了精选权重、标签信息和内容优先级, 适合不知道先看哪篇时快速选择。
+        </p>
+        <RankingList title="热门旅游景点 Top 20" description="优先展示高人气景区、5A 景点和适合第一次出发的路线。" items={travelTop} />
+        <RankingList title="高分电影 Top 20" description="经典、口碑和类型代表作优先, 适合做补片清单。" items={movieTop} />
+        <RankingList title="热门电视剧 Top 20" description="适合假期追剧、长期补剧和类型入门。" items={tvTop} />
+    </Container>
+</BaseLayout>

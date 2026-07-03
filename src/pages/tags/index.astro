@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { tagSlug } from "../../utils/contentEnhancements";
+
+const collections = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+
+const counts = new Map<string, number>();
+for (const entry of collections.flat()) {
+    for (const tag of entry.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+}
+
+const importantTags = new Set([
+    "5A景区",
+    "热门景点",
+    "旅行攻略",
+    "世界遗产",
+    "山岳旅行",
+    "高分电影",
+    "经典电影",
+    "动画电影",
+    "科幻电影",
+    "热门电视剧",
+    "高分美剧",
+    "科幻剧",
+    "悬疑剧",
+    "犯罪剧",
+]);
+
+const tags = [...counts.entries()]
+    .filter(([tag, count]) => count >= 2 || importantTags.has(tag))
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="标签索引" description="按标签浏览旅游、电影和电视剧内容。">
+    <Container class="py-12">
+        <PageTitle title="标签索引" />
+        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            从标签进入更细的内容类型, 比如 5A 景区、高分电影、科幻剧、动画电影、世界遗产和热门电视剧。
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3">
+            {
+                tags.map(([tag, count]) => (
+                    <a
+                        href={`/tags/${tagSlug(tag)}`}
+                        class="rounded-full border border-neutral-200 px-4 py-2 text-sm transition hover:bg-neutral-100 dark:border-neutral-800 dark:hover:bg-neutral-900"
+                    >
+                        {tag} <span class="text-neutral-500">{count}</span>
+                    </a>
+                ))
+            }
+        </div>
+    </Container>
+</BaseLayout>

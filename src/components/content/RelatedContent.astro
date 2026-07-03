@@ -1,0 +1,19 @@
+---
+import Card from "./Card.astro";
+import type { ContentEntry, WithMeta } from "../../types";
+
+interface Props {
+    items: WithMeta<ContentEntry>[];
+}
+
+const { items } = Astro.props;
+
+if (!items.length) return null;
+---
+
+<section class="mt-14 border-t border-neutral-200 pt-10 dark:border-neutral-800">
+    <h2 class="mb-6 text-2xl font-bold">相关推荐</h2>
+    <div class="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+        {items.map((entry) => <Card {entry} />)}
+    </div>
+</section>

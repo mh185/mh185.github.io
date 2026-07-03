@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import ContentGrid from "../../components/layouts/sections/ContentGrid.astro";
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getTopicEntries, topicGroups } from "../../utils/contentEnhancements";
+import { attachMeta } from "../../utils/meta";
+
+export async function getStaticPaths() {
+    return topicGroups.map((topic) => ({
+        params: { id: topic.id },
+        props: { topic },
+    }));
+}
+
+const { topic } = Astro.props;
+const collections = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+const entries = getTopicEntries(collections.flat(), topic.id).map((entry) =>
+    attachMeta(entry),
+);
+---
+
+<BaseLayout title={topic.title} description={topic.description}>
+    <Container class="py-12">
+        <PageTitle title={topic.title} />
+        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            {topic.description}
+        </p>
+        <div class="mt-10">
+            <ContentGrid items={entries} />
+        </div>
+    </Container>
+</BaseLayout>

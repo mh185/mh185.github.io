@@ -1,0 +1,69 @@
+---
+import { getCollection } from "astro:content";
+import ContentGrid from "../../components/layouts/sections/ContentGrid.astro";
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { byScoreDesc, tagSlug } from "../../utils/contentEnhancements";
+import { attachMeta } from "../../utils/meta";
+
+export async function getStaticPaths() {
+    const collections = await Promise.all([
+        getCollection("travel", ({ data }) => !data.draft),
+        getCollection("movies", ({ data }) => !data.draft),
+        getCollection("tv", ({ data }) => !data.draft),
+    ]);
+    const counts = new Map<string, number>();
+    for (const entry of collections.flat()) {
+        for (const tag of entry.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+    const importantTags = new Set([
+        "5A景区",
+        "热门景点",
+        "旅行攻略",
+        "世界遗产",
+        "山岳旅行",
+        "高分电影",
+        "经典电影",
+        "动画电影",
+        "科幻电影",
+        "热门电视剧",
+        "高分美剧",
+        "科幻剧",
+        "悬疑剧",
+        "犯罪剧",
+    ]);
+    const tags = [...counts.entries()]
+        .filter(([tag, count]) => count >= 2 || importantTags.has(tag))
+        .map(([tag]) => tag);
+    return [...tags].map((tag) => ({
+        params: { tag: tagSlug(tag) },
+        props: { tag },
+    }));
+}
+
+const { tag } = Astro.props;
+const collections = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+
+const entries = collections
+    .flat()
+    .filter((entry) => entry.data.tags.includes(tag))
+    .sort(byScoreDesc)
+    .map((entry) => attachMeta(entry));
+---
+
+<BaseLayout title={`${tag} - 标签`} description={`浏览 ${tag} 相关内容。`}>
+    <Container class="py-12">
+        <PageTitle title={tag} />
+        <p class="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
+            共 {entries.length} 篇相关内容。
+        </p>
+        <div class="mt-10">
+            <ContentGrid items={entries} />
+        </div>
+    </Container>
+</BaseLayout>
