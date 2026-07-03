@@ -1,6 +1,5 @@
 ---
 draft: false
-featured: '1'
 title: 我的第一篇旅行记录
 description: 记录一次说走就走的旅行,以及路上遇到的风景和人。
 pubDate: 2026-07-03
