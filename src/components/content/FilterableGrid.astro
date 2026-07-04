@@ -61,7 +61,7 @@ const tags = [...tagCounts.entries()]
 
     <div class="filter-grid grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
         {
-            entries.map((entry) => (
+            entries.map((entry, index) => (
                 <div
                     class="filter-item"
                     data-title={entry.data.title.toLowerCase()}
@@ -72,7 +72,7 @@ const tags = [...tagCounts.entries()]
                     data-score={getEntryScore(entry)}
                     data-reading={parseInt(entry.meta.readingTimeText || "0", 10) || 0}
                 >
-                    <Card {entry} />
+                    <Card entry={entry} loading={index < 9 ? "eager" : "lazy"} />
                 </div>
             ))
         }
@@ -113,6 +113,13 @@ const tags = [...tagCounts.entries()]
                 return Number(b.dataset.score) - Number(a.dataset.score);
             });
             sorted.forEach((item) => grid?.appendChild(item));
+            sorted
+                .filter((item) => !item.hidden)
+                .slice(0, 9)
+                .forEach((item) => {
+                    const image = item.querySelector("img[loading='lazy']");
+                    image?.setAttribute("loading", "eager");
+                });
 
             if (count) count.textContent = String(visible);
             empty?.classList.toggle("hidden", visible !== 0);

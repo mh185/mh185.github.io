@@ -6,6 +6,7 @@ import FavoriteButton from "./FavoriteButton.astro";
 import FormattedDate from "./FormattedDate.astro";
 import Series from "./Series.astro";
 import Tags from "./Tags.astro";
+import { cardImageSrc } from "../../utils/images";
 
 interface Props {
     entry: WithMeta<ContentEntry>;
@@ -27,6 +28,13 @@ const {
 const { readingTimeText } = meta || {};
 
 const displayDate = updatedDate ?? pubDate;
+const fallbackImages = {
+    travel: "/images/zhangjiajie/cover.jpg",
+    movies: "/images/movies/shawshank-redemption/poster.jpg",
+    tv: "/images/tv/breaking-bad/poster.jpg",
+};
+const displayImageSrc = cardImageSrc(image.src);
+const fallbackSrc = cardImageSrc(fallbackImages[collection]);
 ---
 
 <article class="group relative flex flex-col">
@@ -34,7 +42,7 @@ const displayDate = updatedDate ?? pubDate;
     <FavoriteButton entry={entry} class="absolute top-2 right-2" />
 
     <OptimizedImage
-        src={image.src}
+        src={displayImageSrc}
         alt={image.alt}
         width={1600}
         height={900}
@@ -42,6 +50,7 @@ const displayDate = updatedDate ?? pubDate;
         loading={loading}
         wrapperClass="mb-4 aspect-video rounded-lg"
         imageClass="transition duration-250 ease-out group-hover:scale-105 group-active:scale-105"
+        fallbackSrc={fallbackSrc}
     />
 
     <h3

@@ -1,6 +1,7 @@
 ---
 import type { ContentEntry, WithMeta } from "../../types";
 import { entryUrl } from "../../utils/contentEnhancements";
+import { cardImageSrc } from "../../utils/images";
 
 interface Props {
     title: string;
@@ -18,7 +19,7 @@ const preview = items.slice(0, 3);
         {
             preview.map((item) => (
                 <img
-                    src={item.data.image.src}
+                    src={cardImageSrc(item.data.image.src)}
                     alt={item.data.image.alt ?? item.data.title}
                     loading="lazy"
                     class="aspect-[4/3] rounded-lg object-cover"

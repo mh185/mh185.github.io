@@ -1,6 +1,7 @@
 ---
 import { collectionLabels, entryUrl } from "../../utils/contentEnhancements";
 import type { ContentEntry, WithMeta } from "../../types";
+import { cardImageSrc } from "../../utils/images";
 
 interface Props {
     title: string;
@@ -24,7 +25,7 @@ const { title, description, items } = Astro.props;
                         {String(index + 1).padStart(2, "0")}
                     </div>
                     <img
-                        src={entry.data.image.src}
+                        src={cardImageSrc(entry.data.image.src)}
                         alt={entry.data.image.alt ?? entry.data.title}
                         loading="lazy"
                         class="aspect-[4/3] w-full rounded-lg object-cover"

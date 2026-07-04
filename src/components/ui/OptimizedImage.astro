@@ -11,6 +11,7 @@ interface Props {
     imageClass?: string;
     loading?: "lazy" | "eager";
     fetchpriority?: "high" | "low" | "auto";
+    fallbackSrc?: string;
     [key: string]: unknown;
 }
 
@@ -23,6 +24,7 @@ const {
     imageClass = "",
     loading = "lazy",
     fetchpriority,
+    fallbackSrc,
     ...rest
 } = Astro.props;
 
@@ -34,6 +36,9 @@ const fetchPriorityVal =
 const lqipUrl = isCloudinaryUrl(src) ? lqip(src) : undefined;
 const mainSrc =
     isCloudinaryUrl(src) && width ? mainAt(src, Number(width)) : src;
+const imageErrorHandler = fallbackSrc
+    ? "this.onerror=null;this.src=this.dataset.fallbackSrc;this.classList.add('image-fallback-hit')"
+    : undefined;
 ---
 
 <div
@@ -68,6 +73,8 @@ const mainSrc =
         loading={loading}
         fetchpriority={fetchPriorityVal}
         decoding="async"
+        data-fallback-src={fallbackSrc}
+        onerror={imageErrorHandler}
         {...rest}
     />
 </div>

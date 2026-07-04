@@ -76,8 +76,12 @@ if (count === 0) return null;
                 </div>
                 {remainingItems.length > 0 && (
                     <div class="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-                        {remainingItems.map((item) => (
-                            <FeaturedCard entry={item} size="small" />
+                        {remainingItems.map((item, index) => (
+                            <FeaturedCard
+                                entry={item}
+                                size="small"
+                                loading={index < 9 ? "eager" : "lazy"}
+                            />
                         ))}
                     </div>
                 )}

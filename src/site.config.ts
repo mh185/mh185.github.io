@@ -1,6 +1,6 @@
 export const SITE_SETTINGS = {
-  title: "麻辣各八类",
-  description: "分享旅游、电影、电视剧等吃喝玩乐推荐。",
+  title: "玩影指南",
+  description: "旅游攻略、电影电视剧推荐与实用工具。",
   owner: "站长",
   ogImages:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Sandstone_spire_forest_Zhangjiajie_Hunan.jpg/1280px-Sandstone_spire_forest_Zhangjiajie_Hunan.jpg",
@@ -31,6 +31,14 @@ export const header = [
   {
     name: "路线",
     url: "/plans",
+  },
+  {
+    name: "工具",
+    url: "/tools",
+  },
+  {
+    name: "外链",
+    url: "/links",
   },
   {
     name: "收藏",
@@ -65,6 +73,14 @@ export const footer = [
       {
         name: "路线和片单",
         url: "/plans",
+      },
+      {
+        name: "实用工具",
+        url: "/tools",
+      },
+      {
+        name: "外链导航",
+        url: "/links",
       },
       {
         name: "我的收藏",

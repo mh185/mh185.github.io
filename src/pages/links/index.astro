@@ -1,0 +1,233 @@
+---
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const linkGroups = [
+    {
+        title: "旅游出行",
+        description: "查攻略、订票、看地图和确认景区信息。",
+        links: [
+            {
+                name: "携程旅行",
+                url: "https://www.ctrip.com/",
+                note: "机票、酒店、门票和跟团产品比较全。",
+            },
+            {
+                name: "去哪儿旅行",
+                url: "https://www.qunar.com/",
+                note: "适合比价机票、酒店和火车票。",
+            },
+            {
+                name: "马蜂窝",
+                url: "https://www.mafengwo.cn/",
+                note: "游记、路线、景点攻略和目的地灵感。",
+            },
+            {
+                name: "穷游网",
+                url: "https://www.qyer.com/",
+                note: "自由行攻略、境外目的地和旅行问答。",
+            },
+            {
+                name: "高德地图",
+                url: "https://www.amap.com/",
+                note: "国内路线规划、公交地铁、自驾导航。",
+            },
+            {
+                name: "中国铁路 12306",
+                url: "https://www.12306.cn/",
+                note: "火车票官方查询和购票入口。",
+            },
+            {
+                name: "文化和旅游部",
+                url: "https://www.mct.gov.cn/",
+                note: "文旅政策、景区公告和官方信息来源。",
+            },
+            {
+                name: "中国天气网",
+                url: "https://www.weather.com.cn/",
+                note: "出行前确认天气、降雨和温度变化。",
+            },
+        ],
+    },
+    {
+        title: "电影资料",
+        description: "查评分、片单、影人资料、预告和奖项信息。",
+        links: [
+            {
+                name: "豆瓣电影",
+                url: "https://movie.douban.com/",
+                note: "中文电影评分、短评、片单和影人资料。",
+            },
+            {
+                name: "IMDb",
+                url: "https://www.imdb.com/",
+                note: "全球影视资料库, 适合查演员、导演和片目信息。",
+            },
+            {
+                name: "烂番茄",
+                url: "https://www.rottentomatoes.com/",
+                note: "北美影评人和观众口碑参考。",
+            },
+            {
+                name: "Metacritic",
+                url: "https://www.metacritic.com/movie/",
+                note: "媒体综合评分, 适合查欧美新片口碑。",
+            },
+            {
+                name: "TMDB",
+                url: "https://www.themoviedb.org/",
+                note: "电影海报、剧照、演员表和多语言资料。",
+            },
+            {
+                name: "猫眼电影",
+                url: "https://www.maoyan.com/",
+                note: "国内院线、票房、排片和热门电影信息。",
+            },
+            {
+                name: "时光网",
+                url: "http://www.mtime.com/",
+                note: "电影资讯、预告和影人资料。",
+            },
+            {
+                name: "Letterboxd",
+                url: "https://letterboxd.com/",
+                note: "海外影迷片单、观影记录和长短评社区。",
+            },
+        ],
+    },
+    {
+        title: "电视剧追剧",
+        description: "找剧集资料、播出信息、评分和官方预告。",
+        links: [
+            {
+                name: "豆瓣电视剧",
+                url: "https://movie.douban.com/tv/",
+                note: "中文剧集评分、短评和热门剧集榜单。",
+            },
+            {
+                name: "IMDb TV",
+                url: "https://www.imdb.com/chart/toptv/",
+                note: "高分剧集榜和剧集资料查询。",
+            },
+            {
+                name: "TMDB TV",
+                url: "https://www.themoviedb.org/tv",
+                note: "剧集海报、分季资料、演员和播出信息。",
+            },
+            {
+                name: "MyDramaList",
+                url: "https://mydramalist.com/",
+                note: "亚洲剧集资料、片单和追剧记录。",
+            },
+            {
+                name: "Netflix",
+                url: "https://www.netflix.com/",
+                note: "Netflix 原创剧和片库入口。",
+            },
+            {
+                name: "腾讯视频",
+                url: "https://v.qq.com/",
+                note: "国产剧、综艺和动画剧集平台。",
+            },
+            {
+                name: "爱奇艺",
+                url: "https://www.iqiyi.com/",
+                note: "国产剧、迷雾剧场、综艺和电影片库。",
+            },
+            {
+                name: "优酷",
+                url: "https://www.youku.com/",
+                note: "国产剧、港剧、综艺和经典片库。",
+            },
+        ],
+    },
+    {
+        title: "视频与预告",
+        description: "看官方预告、幕后物料和影视解读。",
+        links: [
+            {
+                name: "YouTube Movies",
+                url: "https://www.youtube.com/movies",
+                note: "海外电影频道、预告和官方物料入口。",
+            },
+            {
+                name: "Bilibili",
+                url: "https://www.bilibili.com/",
+                note: "影视解读、预告混剪、纪录片和UP主内容。",
+            },
+            {
+                name: "Apple TV",
+                url: "https://tv.apple.com/",
+                note: "Apple 原创剧、电影和官方预告。",
+            },
+            {
+                name: "Disney+",
+                url: "https://www.disneyplus.com/",
+                note: "迪士尼、漫威、星战和皮克斯片库。",
+            },
+        ],
+    },
+];
+
+const iconExtensions = {
+    "mafengwo.cn": "ico",
+    "qyer.com": "ico",
+    "mtime.com": "ico",
+};
+
+const linkIconPath = (url: string) => {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    const extension = iconExtensions[host] ?? "png";
+    return `/images/link-icons/${host}.${extension}`;
+};
+---
+
+<BaseLayout title="外链导航" description="旅游、电影、电视剧常用网站导航。">
+    <Container class="space-y-10 py-12">
+        <PageTitle title="外链导航" />
+        <p class="max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            收集旅游、电影、电视剧相关的常用网站, 方便查攻略、看评分、找片单、确认票务和获取官方资料。
+        </p>
+
+        <div class="grid gap-8">
+            {
+                linkGroups.map((group) => (
+                    <section>
+                        <div class="mb-4">
+                            <h2 class="text-2xl font-bold">{group.title}</h2>
+                            <p class="mt-2 text-neutral-600 dark:text-neutral-400">{group.description}</p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                            {group.links.map((link) => (
+                                <a
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="rounded-xl border border-neutral-200 p-5 transition hover:-translate-y-0.5 hover:bg-neutral-50 hover:shadow-sm dark:border-neutral-800 dark:hover:bg-neutral-900"
+                                >
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div class="flex min-w-0 items-center gap-3">
+                                            <img
+                                                src={linkIconPath(link.url)}
+                                                alt=""
+                                                width="40"
+                                                height="40"
+                                                loading="lazy"
+                                                class="size-10 shrink-0 object-contain"
+                                            />
+                                            <h3 class="truncate font-bold">{link.name}</h3>
+                                        </div>
+                                        <span aria-hidden="true" class="text-neutral-400">↗</span>
+                                    </div>
+                                    <p class="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-400">{link.note}</p>
+                                    <div class="mt-4 truncate text-xs text-neutral-500">{link.url.replace(/^https?:\/\//, "")}</div>
+                                </a>
+                            ))}
+                        </div>
+                    </section>
+                ))
+            }
+        </div>
+    </Container>
+</BaseLayout>
