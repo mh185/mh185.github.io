@@ -35,7 +35,7 @@ const repoUrl = "repoUrl" in data ? data.repoUrl : undefined;
 ---
 
 <header class="mb-12">
-    {featured && <FeaturedTag />}
+    {featured && <FeaturedTag featured={featured} />}
 
     <h1
         data-pagefind-meta="title"

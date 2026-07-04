@@ -3,9 +3,12 @@ import { cn } from "../../utils/styles";
 
 interface Props {
     class?: string;
+    featured?: string | number | boolean;
 }
 
-const { class: cls = "" } = Astro.props;
+const { class: cls = "", featured } = Astro.props;
+const rank = typeof featured === "string" || typeof featured === "number" ? String(featured) : "";
+const label = rank ? `精选第${rank}名` : "精选";
 ---
 
 <span
@@ -14,5 +17,5 @@ const { class: cls = "" } = Astro.props;
         cls,
     )}
 >
-    精选
+    {label}
 </span>

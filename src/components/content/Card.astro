@@ -29,7 +29,7 @@ const { readingTimeText } = meta || {};
 
 const displayDate = updatedDate ?? pubDate;
 const fallbackImages = {
-    travel: "/images/zhangjiajie/cover.jpg",
+    travel: "/images/travel/great-wall/cover.webp",
     movies: "/images/movies/shawshank-redemption/poster.jpg",
     tv: "/images/tv/breaking-bad/poster.jpg",
 };
@@ -38,7 +38,7 @@ const fallbackSrc = cardImageSrc(fallbackImages[collection]);
 ---
 
 <article class="group relative flex flex-col">
-    {featured && <FeaturedTag class="absolute top-1 left-1 z-10" />}
+    {featured && <FeaturedTag featured={featured} class="absolute top-1 left-1 z-10" />}
     <FavoriteButton entry={entry} class="absolute top-2 right-2" />
 
     <OptimizedImage
