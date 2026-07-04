@@ -2,6 +2,7 @@
 import OptimizedImage from "../ui/OptimizedImage.astro";
 import type { ContentEntry, ImageLoading, WithMeta } from "../../types";
 import FeaturedTag from "./FeaturedTag.astro";
+import FavoriteButton from "./FavoriteButton.astro";
 import FormattedDate from "./FormattedDate.astro";
 import Series from "./Series.astro";
 import Tags from "./Tags.astro";
@@ -30,6 +31,7 @@ const displayDate = updatedDate ?? pubDate;
 
 <article class="group relative flex flex-col">
     {featured && <FeaturedTag class="absolute top-1 left-1 z-10" />}
+    <FavoriteButton entry={entry} class="absolute top-2 right-2" />
 
     <OptimizedImage
         src={image.src}

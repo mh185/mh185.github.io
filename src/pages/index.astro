@@ -109,6 +109,8 @@ const hasContent = featured.length > 0 || latest.length > 0;
                         <div class="mt-5 flex flex-wrap gap-3">
                             <a href="/rankings" class="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white dark:bg-neutral-100 dark:text-black">排行榜</a>
                             <a href="/topics" class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">专题合集</a>
+                            <a href="/plans" class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">路线和片单</a>
+                            <a href="/saved" class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">我的收藏</a>
                             <a href="/tags" class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">标签索引</a>
                             {quickTags.map(([label, tag]) => (
                                 <a href={`/tags/${tagSlug(tag)}`} class="rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold dark:border-neutral-800">{label}</a>

@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import ContentGrid from "../../components/layouts/sections/ContentGrid.astro";
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { attachMeta } from "../../utils/meta";
+import { plans } from "../../utils/plans";
+
+export function getStaticPaths() {
+    return plans.map((plan) => ({
+        params: { id: plan.id },
+        props: { plan },
+    }));
+}
+
+const { plan } = Astro.props;
+const [travel, movies, tv] = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+const entries = [...travel, ...movies, ...tv];
+const byKey = new Map(entries.map((entry) => [`${entry.collection}/${entry.id}`, entry]));
+const planEntries = plan.entries
+    .map(([collection, id]) => byKey.get(`${collection}/${id}`))
+    .filter(Boolean)
+    .map((entry) => attachMeta(entry));
+---
+
+<BaseLayout title={plan.title} description={plan.description}>
+    <Container class="py-12">
+        <PageTitle title={plan.title} />
+        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            {plan.description}
+        </p>
+
+        <section class="mt-10 rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
+            <h2 class="text-2xl font-bold">推荐顺序</h2>
+            <ol class="mt-6 space-y-4">
+                {
+                    plan.days.map((day, index) => (
+                        <li class="grid grid-cols-[auto_1fr] gap-4">
+                            <span class="flex size-8 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold text-white dark:bg-neutral-100 dark:text-black">{index + 1}</span>
+                            <span class="pt-1">{day}</span>
+                        </li>
+                    ))
+                }
+            </ol>
+        </section>
+
+        <section class="mt-10 rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
+            <h2 class="text-2xl font-bold">执行建议</h2>
+            <ul class="mt-5 space-y-3 text-neutral-700 dark:text-neutral-300">
+                {plan.tips.map((tip) => <li>• {tip}</li>)}
+            </ul>
+        </section>
+
+        <div class="mt-12">
+            <ContentGrid items={planEntries} />
+        </div>
+    </Container>
+</BaseLayout>

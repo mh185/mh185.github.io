@@ -1,0 +1,74 @@
+---
+import { Icon } from "astro-icon/components";
+import type { ContentEntry } from "../../types";
+
+interface Props {
+    entry: ContentEntry;
+    class?: string;
+}
+
+const { entry, class: cls = "" } = Astro.props;
+const payload = {
+    key: `${entry.collection}/${entry.id}`,
+    collection: entry.collection,
+    id: entry.id,
+    title: entry.data.title,
+    description: entry.data.description,
+    image: entry.data.image.src,
+    href: `/${entry.collection}/${entry.id}`,
+};
+---
+
+<button
+    type="button"
+    class={`favorite-toggle z-20 inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-neutral-700 shadow-sm transition hover:bg-neutral-100 active:scale-95 dark:border-neutral-700 dark:bg-neutral-900/95 dark:text-neutral-100 dark:hover:bg-neutral-800 ${cls}`}
+    data-favorite={JSON.stringify(payload)}
+    aria-label="收藏"
+    aria-pressed="false"
+>
+    <Icon name="lucide:bookmark" class="favorite-off size-5" />
+    <Icon name="lucide:bookmark-check" class="favorite-on hidden size-5" />
+</button>
+
+<script is:inline>
+    (() => {
+        const key = "savedEntries";
+        const read = () => {
+            try {
+                return JSON.parse(localStorage.getItem(key) || "[]");
+            } catch {
+                return [];
+            }
+        };
+        const write = (items) => localStorage.setItem(key, JSON.stringify(items));
+        const savedKeys = () => new Set(read().map((item) => item.key));
+        const refresh = () => {
+            const keys = savedKeys();
+            document.querySelectorAll(".favorite-toggle").forEach((button) => {
+                const data = JSON.parse(button.dataset.favorite || "{}");
+                const active = keys.has(data.key);
+                button.setAttribute("aria-pressed", String(active));
+                button.classList.toggle("text-blue-600", active);
+                button.querySelector(".favorite-on")?.classList.toggle("hidden", !active);
+                button.querySelector(".favorite-off")?.classList.toggle("hidden", active);
+            });
+            document.dispatchEvent(new CustomEvent("saved-entries-updated"));
+        };
+        if (!window.__favoriteButtonsReady) {
+            window.__favoriteButtonsReady = true;
+            document.addEventListener("click", (event) => {
+                const button = event.target.closest?.(".favorite-toggle");
+                if (!button) return;
+                event.preventDefault();
+                event.stopPropagation();
+                const data = JSON.parse(button.dataset.favorite || "{}");
+                const items = read();
+                const exists = items.some((item) => item.key === data.key);
+                write(exists ? items.filter((item) => item.key !== data.key) : [data, ...items]);
+                refresh();
+            });
+            document.addEventListener("astro:page-load", refresh);
+        }
+        refresh();
+    })();
+</script>

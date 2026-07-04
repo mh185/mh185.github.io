@@ -3,7 +3,7 @@ import Container from "../components/layouts/Container.astro";
 import EmptyState from "../components/ui/EmptyState.astro";
 import PageTitle from "../components/ui/PageTitle.astro";
 import BaseLayout from "./BaseLayout.astro";
-import Card from "../components/content/Card.astro";
+import FilterableGrid from "../components/content/FilterableGrid.astro";
 
 import type { ContentEntry, WithMeta } from "../types";
 
@@ -37,11 +37,7 @@ const collection = entries[0]?.collection;
                     message="很快会有新内容,欢迎稍后再来!"
                 />
             ) : (
-                <div class="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-                    {entries.map((entry) => (
-                        <Card {entry} />
-                    ))}
-                </div>
+                <FilterableGrid {entries} />
             )
         }
     </Container>

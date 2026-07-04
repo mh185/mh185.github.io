@@ -1,0 +1,37 @@
+---
+import Container from "../../components/layouts/Container.astro";
+import PageTitle from "../../components/ui/PageTitle.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { plans } from "../../utils/plans";
+
+const typeLabel = {
+    travel: "旅游路线",
+    movies: "观影顺序",
+    tv: "追剧路线",
+};
+---
+
+<BaseLayout title="路线和片单" description="旅游路线、电影观看顺序和电视剧追剧路线。">
+    <Container class="py-12">
+        <PageTitle title="路线和片单" />
+        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            不只看单篇文章, 也可以按路线、顺序和场景连续浏览。
+        </p>
+        <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {
+                plans.map((plan) => (
+                    <a href={`/plans/${plan.id}`} class="rounded-xl border border-neutral-200 p-5 transition hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900">
+                        <div class="mb-3 text-sm font-semibold text-neutral-500">{typeLabel[plan.type]}</div>
+                        <h2 class="text-xl font-bold">{plan.title}</h2>
+                        <p class="mt-2 line-clamp-3 text-sm leading-6 text-neutral-600 dark:text-neutral-400">{plan.description}</p>
+                        <ol class="mt-4 space-y-2 text-sm">
+                            {plan.days.slice(0, 4).map((day, index) => (
+                                <li><span class="font-semibold">{index + 1}.</span> {day}</li>
+                            ))}
+                        </ol>
+                    </a>
+                ))
+            }
+        </div>
+    </Container>
+</BaseLayout>

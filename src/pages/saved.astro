@@ -1,0 +1,73 @@
+---
+import { getCollection } from "astro:content";
+import Card from "../components/content/Card.astro";
+import Container from "../components/layouts/Container.astro";
+import PageTitle from "../components/ui/PageTitle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { attachMeta } from "../utils/meta";
+
+const collections = await Promise.all([
+    getCollection("travel", ({ data }) => !data.draft),
+    getCollection("movies", ({ data }) => !data.draft),
+    getCollection("tv", ({ data }) => !data.draft),
+]);
+
+const entries = collections.flat().map((entry) => attachMeta(entry));
+---
+
+<BaseLayout title="我的收藏" description="保存在本机浏览器里的旅行、电影和电视剧清单。">
+    <Container class="py-12">
+        <PageTitle title="我的收藏" />
+        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
+            收藏会保存在当前浏览器中, 适合临时整理想去的景点、想看的电影和准备追的剧。
+        </p>
+
+        <div class="saved-empty mt-10 rounded-xl border border-dashed border-neutral-300 p-10 text-center text-neutral-500 dark:border-neutral-700">
+            还没有收藏内容。打开任意文章或卡片, 点收藏按钮即可加入这里。
+        </div>
+
+        <div class="saved-grid mt-10 hidden grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+            {
+                entries.map((entry) => (
+                    <div class="saved-item" data-key={`${entry.collection}/${entry.id}`}>
+                        <Card {entry} />
+                    </div>
+                ))
+            }
+        </div>
+    </Container>
+</BaseLayout>
+
+<script>
+    const key = "savedEntries";
+    const grid = document.querySelector<HTMLElement>(".saved-grid");
+    const empty = document.querySelector<HTMLElement>(".saved-empty");
+    const items = Array.from(document.querySelectorAll<HTMLElement>(".saved-item"));
+
+    const renderSaved = () => {
+        let saved = [];
+        try {
+            saved = JSON.parse(localStorage.getItem(key) || "[]");
+        } catch {
+            saved = [];
+        }
+        const order = new Map(saved.map((item, index) => [item.key, index]));
+        let visible = 0;
+        items
+            .sort((a, b) => (order.get(a.dataset.key) ?? 9999) - (order.get(b.dataset.key) ?? 9999))
+            .forEach((item) => {
+                const show = order.has(item.dataset.key);
+                item.hidden = !show;
+                if (show) {
+                    visible++;
+                    grid?.appendChild(item);
+                }
+            });
+        grid?.classList.toggle("hidden", visible === 0);
+        grid?.classList.toggle("grid", visible > 0);
+        empty?.classList.toggle("hidden", visible > 0);
+    };
+
+    renderSaved();
+    document.addEventListener("saved-entries-updated", renderSaved);
+</script>
