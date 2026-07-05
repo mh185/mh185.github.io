@@ -52,6 +52,16 @@ export function entryUrl(entry: Entry) {
     return `/${entry.collection}/${entry.id}`;
 }
 
+export function getTravelRank(entry: Entry) {
+    if (entry.collection !== "travel") return undefined;
+    const haystacks = [entry.data.title, ...entry.data.tags];
+    for (const text of haystacks) {
+        const match = text.match(/第(\d+)名/);
+        if (match) return Number.parseInt(match[1], 10);
+    }
+    return undefined;
+}
+
 export function tagSlug(tag: string) {
     return `t-${[...tag]
         .map((char) => char.codePointAt(0)?.toString(36) ?? "")
@@ -60,15 +70,21 @@ export function tagSlug(tag: string) {
 
 export function getEntryScore(entry: Entry) {
     const key = `${entry.collection}/${entry.id}`;
-    const featured = entry.data.featured ? 120 - entry.data.featured : 0;
+    const travelRank = getTravelRank(entry);
+    const rankScore = travelRank ? 1000 - travelRank : 0;
+    const featured = typeof entry.data.featured === "number" ? 120 - entry.data.featured : 0;
     const boost = scoreBoosts[key] ?? 0;
     const tagScore = entry.data.tags.length;
     const recency = Math.floor(entry.data.pubDate.valueOf() / 1000000000);
-    return featured * 1000 + boost * 10 + tagScore + recency / 1000;
+    return rankScore * 1000 + featured * 1000 + boost * 10 + tagScore + recency / 1000;
 }
 
 export function byScoreDesc(a: Entry, b: Entry) {
     return getEntryScore(b) - getEntryScore(a);
+}
+
+export function byTravelRankAsc(a: Entry, b: Entry) {
+    return (getTravelRank(a) ?? 9999) - (getTravelRank(b) ?? 9999);
 }
 
 export const topicGroups = [

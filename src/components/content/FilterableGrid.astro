@@ -1,13 +1,14 @@
 ---
 import Card from "./Card.astro";
 import type { ContentEntry, WithMeta } from "../../types";
-import { getEntryScore } from "../../utils/contentEnhancements";
+import { getEntryScore, getTravelRank } from "../../utils/contentEnhancements";
 
 interface Props {
     entries: WithMeta<ContentEntry>[];
 }
 
 const { entries } = Astro.props;
+const hasTravelRanks = entries.some((entry) => getTravelRank(entry) !== undefined);
 
 const tagCounts = new Map<string, number>();
 for (const entry of entries) {
@@ -43,6 +44,7 @@ const tags = [...tagCounts.entries()]
             <label class="block">
                 <span class="mb-1 block text-sm font-medium text-neutral-600 dark:text-neutral-400">排序</span>
                 <select class="filter-sort w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-950">
+                    {hasTravelRanks && <option value="rank">排名优先</option>}
                     <option value="score">推荐优先</option>
                     <option value="latest">最新发布</option>
                     <option value="title">标题 A-Z</option>
@@ -56,7 +58,7 @@ const tags = [...tagCounts.entries()]
     </div>
 
     <div class="filter-empty hidden rounded-xl border border-dashed border-neutral-300 p-8 text-center text-neutral-500 dark:border-neutral-700">
-        没有找到匹配内容, 换个关键词或标签试试。
+        没有找到匹配内容，换个关键词或标签试试。
     </div>
 
     <div class="filter-grid grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
@@ -70,6 +72,7 @@ const tags = [...tagCounts.entries()]
                     data-tag-values={entry.data.tags.join("|")}
                     data-date={entry.data.pubDate.valueOf()}
                     data-score={getEntryScore(entry)}
+                    data-rank={getTravelRank(entry) ?? 9999}
                     data-reading={parseInt(entry.meta.readingTimeText || "0", 10) || 0}
                 >
                     <Card entry={entry} loading={index < 9 ? "eager" : "lazy"} />
@@ -107,6 +110,7 @@ const tags = [...tagCounts.entries()]
 
             const mode = sort?.value ?? "score";
             const sorted = [...items].sort((a, b) => {
+                if (mode === "rank") return Number(a.dataset.rank) - Number(b.dataset.rank);
                 if (mode === "latest") return Number(b.dataset.date) - Number(a.dataset.date);
                 if (mode === "title") return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
                 if (mode === "reading") return Number(b.dataset.reading) - Number(a.dataset.reading);
