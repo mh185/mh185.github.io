@@ -9,6 +9,7 @@ import EmptyState from "../components/ui/EmptyState.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {
     byScoreDesc,
+    byMovieRankAsc,
     byTravelRankAsc,
     getTopicEntries,
     tagSlug,
@@ -41,7 +42,7 @@ const latest = sorted
 
 const topicPreview = topicGroups.slice(0, 4);
 const travelTop = [...travel].sort(byTravelRankAsc).slice(0, 6).map((p) => attachMeta(p));
-const movieTop = [...movies].sort(byScoreDesc).slice(0, 6).map((p) => attachMeta(p));
+const movieTop = [...movies].sort(byMovieRankAsc).slice(0, 6).map((p) => attachMeta(p));
 const tvTop = [...tv].sort(byScoreDesc).slice(0, 6).map((p) => attachMeta(p));
 const rankingPreview = [...all].sort(byScoreDesc).slice(0, 10).map((p) => attachMeta(p));
 const quickTags = [

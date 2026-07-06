@@ -4,7 +4,7 @@ import RankingList from "../../components/content/RankingList.astro";
 import Container from "../../components/layouts/Container.astro";
 import PageTitle from "../../components/ui/PageTitle.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { byScoreDesc, byTravelRankAsc } from "../../utils/contentEnhancements";
+import { byScoreDesc, byMovieRankAsc, byTravelRankAsc } from "../../utils/contentEnhancements";
 import { attachMeta } from "../../utils/meta";
 
 const [travel, movies, tv] = await Promise.all([
@@ -14,7 +14,7 @@ const [travel, movies, tv] = await Promise.all([
 ]);
 
 const travelTop = travel.sort(byTravelRankAsc).slice(0, 20).map((entry) => attachMeta(entry));
-const movieTop = movies.sort(byScoreDesc).slice(0, 20).map((entry) => attachMeta(entry));
+const movieTop = movies.sort(byMovieRankAsc).slice(0, 20).map((entry) => attachMeta(entry));
 const tvTop = tv.sort(byScoreDesc).slice(0, 20).map((entry) => attachMeta(entry));
 ---
 

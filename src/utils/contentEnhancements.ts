@@ -72,11 +72,23 @@ export function getEntryScore(entry: Entry) {
     const key = `${entry.collection}/${entry.id}`;
     const travelRank = getTravelRank(entry);
     const rankScore = travelRank ? 1000 - travelRank : 0;
+    // 电影按榜单名次(全球100部必看)排序，名次越小分越高
+    const movieRank = entry.collection === "movies" && typeof entry.data.rank === "number"
+        ? entry.data.rank
+        : undefined;
+    const movieRankScore = movieRank ? 1000 - movieRank : 0;
     const featured = typeof entry.data.featured === "number" ? 120 - entry.data.featured : 0;
     const boost = scoreBoosts[key] ?? 0;
     const tagScore = entry.data.tags.length;
     const recency = Math.floor(entry.data.pubDate.valueOf() / 1000000000);
-    return rankScore * 1000 + featured * 1000 + boost * 10 + tagScore + recency / 1000;
+    return (rankScore + movieRankScore) * 1000 + featured * 1000 + boost * 10 + tagScore + recency / 1000;
+}
+
+// 电影专用：直接按榜单名次升序（无名次排最后）
+export function byMovieRankAsc(a: Entry, b: Entry) {
+    const ra = typeof a.data.rank === "number" ? a.data.rank : 9999;
+    const rb = typeof b.data.rank === "number" ? b.data.rank : 9999;
+    return ra - rb;
 }
 
 export function byScoreDesc(a: Entry, b: Entry) {
