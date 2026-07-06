@@ -67,6 +67,8 @@ const licenses = defineCollection({
 const baseSchema = z.object({
   draft: z.boolean().default(false),
   featured: featuredSchema,
+  // 榜单名次（如"全球100部必看电影"里的序号），用于列表排序；越小越靠前
+  rank: z.number().optional(),
   title: z.string().min(1, { message: "Title cannot be empty." }),
   description: z.string().min(1, { message: "Description cannot be empty." }),
   authors: z.array(z.string()).default([]),

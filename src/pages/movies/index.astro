@@ -4,7 +4,13 @@ import ListLayout from "../../layouts/ListLayout.astro";
 import { attachMeta } from "../../utils/meta";
 
 const posts = (await getCollection("movies", ({ data }) => !data.draft))
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    // 先按榜单名次升序（无名次的排在最后），名次相同再按发布日期倒序
+    .sort((a, b) => {
+        const ra = a.data.rank ?? Infinity;
+        const rb = b.data.rank ?? Infinity;
+        if (ra !== rb) return ra - rb;
+        return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+    })
     .map((p) => attachMeta(p));
 ---
 

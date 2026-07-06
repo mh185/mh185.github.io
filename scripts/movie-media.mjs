@@ -32,4 +32,16 @@ for (const u of backdrops) {
   await toWebp(u, `scene-${i}.webp`, 1280);
   i++;
 }
-console.log(`✓ ${slug}: 1 poster + ${backdrops.length} scenes`);
+
+// 生成卡片缩略图 (1600x900 progressive JPEG)，卡片封面用的是 _thumbs 路径，
+// 见 src/utils/images.ts -> cardImageSrc；缺缩略图会回退到长城占位图。
+const thumbDir = `public/images/_thumbs/movies/${slug}`;
+await mkdir(thumbDir, { recursive: true });
+for (const name of ["poster", ...backdrops.map((_, n) => `scene-${n + 1}`)]) {
+  await sharp(`${dir}/${name}.webp`)
+    .resize(1600, 900, { fit: "cover", position: "attention" })
+    .jpeg({ quality: 80, progressive: true, mozjpeg: true })
+    .toFile(`${thumbDir}/${name}.jpg`);
+}
+
+console.log(`✓ ${slug}: 1 poster + ${backdrops.length} scenes (+缩略图)`);
