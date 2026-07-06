@@ -8,7 +8,10 @@ interface Props {
 }
 
 const { entries } = Astro.props;
-const hasTravelRanks = entries.some((entry) => getTravelRank(entry) !== undefined);
+// 旅游有「第N名」标题，电影有 rank 字段——两者都可按名次排序
+const entryRank = (entry: (typeof entries)[number]) =>
+    getTravelRank(entry) ?? (typeof entry.data.rank === "number" ? entry.data.rank : undefined);
+const hasRanks = entries.some((entry) => entryRank(entry) !== undefined);
 
 const tagCounts = new Map<string, number>();
 for (const entry of entries) {
@@ -44,7 +47,7 @@ const tags = [...tagCounts.entries()]
             <label class="block">
                 <span class="mb-1 block text-sm font-medium text-neutral-600 dark:text-neutral-400">排序</span>
                 <select class="filter-sort w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-950">
-                    {hasTravelRanks && <option value="rank">排名优先</option>}
+                    {hasRanks && <option value="rank">排名优先</option>}
                     <option value="score">推荐优先</option>
                     <option value="latest">最新发布</option>
                     <option value="title">标题 A-Z</option>
@@ -72,7 +75,7 @@ const tags = [...tagCounts.entries()]
                     data-tag-values={entry.data.tags.join("|")}
                     data-date={entry.data.pubDate.valueOf()}
                     data-score={getEntryScore(entry)}
-                    data-rank={getTravelRank(entry) ?? 9999}
+                    data-rank={entryRank(entry) ?? 9999}
                     data-reading={parseInt(entry.meta.readingTimeText || "0", 10) || 0}
                 >
                     <Card entry={entry} loading={index < 9 ? "eager" : "lazy"} />

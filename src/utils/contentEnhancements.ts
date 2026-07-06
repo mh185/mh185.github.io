@@ -69,19 +69,18 @@ export function tagSlug(tag: string) {
 }
 
 export function getEntryScore(entry: Entry) {
+    // 电影完全按榜单名次(全球100部必看)排序，名次越小分越高，不受 featured/boost 干扰
+    if (entry.collection === "movies" && typeof entry.data.rank === "number") {
+        return 1_000_000 - entry.data.rank;
+    }
     const key = `${entry.collection}/${entry.id}`;
     const travelRank = getTravelRank(entry);
     const rankScore = travelRank ? 1000 - travelRank : 0;
-    // 电影按榜单名次(全球100部必看)排序，名次越小分越高
-    const movieRank = entry.collection === "movies" && typeof entry.data.rank === "number"
-        ? entry.data.rank
-        : undefined;
-    const movieRankScore = movieRank ? 1000 - movieRank : 0;
     const featured = typeof entry.data.featured === "number" ? 120 - entry.data.featured : 0;
     const boost = scoreBoosts[key] ?? 0;
     const tagScore = entry.data.tags.length;
     const recency = Math.floor(entry.data.pubDate.valueOf() / 1000000000);
-    return (rankScore + movieRankScore) * 1000 + featured * 1000 + boost * 10 + tagScore + recency / 1000;
+    return rankScore * 1000 + featured * 1000 + boost * 10 + tagScore + recency / 1000;
 }
 
 // 电影专用：直接按榜单名次升序（无名次排最后）
