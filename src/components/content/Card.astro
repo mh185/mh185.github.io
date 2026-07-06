@@ -22,9 +22,12 @@ const {
     updatedDate,
     image,
     featured,
+    rank,
     series,
     tags,
 } = data;
+// 电影等有榜单名次的用 rank，其余(旅游/电视剧)沿用 featured
+const rankBadge = rank ?? featured;
 const { readingTimeText } = meta || {};
 
 const displayDate = updatedDate ?? pubDate;
@@ -38,7 +41,7 @@ const fallbackSrc = cardImageSrc(fallbackImages[collection]);
 ---
 
 <article class="group relative flex flex-col">
-    {featured && <FeaturedTag featured={featured} class="absolute top-1 left-1 z-10" />}
+    {rankBadge && <FeaturedTag featured={rankBadge} class="absolute top-1 left-1 z-10" />}
     <FavoriteButton entry={entry} class="absolute top-2 right-2" />
 
     <OptimizedImage
