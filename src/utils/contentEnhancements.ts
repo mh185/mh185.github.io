@@ -69,8 +69,8 @@ export function tagSlug(tag: string) {
 }
 
 export function getEntryScore(entry: Entry) {
-    // 电影完全按榜单名次(全球100部必看)排序，名次越小分越高，不受 featured/boost 干扰
-    if (entry.collection === "movies" && typeof entry.data.rank === "number") {
+    // 带榜单名次的内容(电影/旅游)完全按名次排序，名次越小分越高，不受 featured/boost 干扰
+    if (typeof entry.data.rank === "number") {
         return 1_000_000 - entry.data.rank;
     }
     const key = `${entry.collection}/${entry.id}`;
