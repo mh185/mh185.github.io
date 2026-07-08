@@ -1,6 +1,6 @@
 export const SITE_SETTINGS = {
   title: "玩影指南",
-  description: "旅游攻略、电影电视剧推荐与实用工具。",
+  description: "中国100个必去景点、全球100部必看电影、100部必看电视剧，每篇都有深度点评。",
   owner: "站长",
   ogImages:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Sandstone_spire_forest_Zhangjiajie_Hunan.jpg/1280px-Sandstone_spire_forest_Zhangjiajie_Hunan.jpg",
