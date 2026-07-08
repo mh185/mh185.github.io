@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import RankingList from "../components/content/RankingList.astro";
 import TopicCard from "../components/content/TopicCard.astro";
+import FlagshipCard from "../components/content/FlagshipCard.astro";
 import Container from "../components/layouts/Container.astro";
 import ContentGrid from "../components/layouts/sections/ContentGrid.astro";
 import FeaturedContent from "../components/layouts/sections/FeaturedContent.astro";
@@ -40,6 +41,37 @@ const latest = sorted
     .slice(0, 6)
     .map((p) => attachMeta(p));
 
+// 三大旗舰清单（按名次取前几篇做封面预览）
+const flagships = [
+    {
+        title: "中国最值得去的100个景点",
+        description: "从山岳、古建、石窟到湖海海岛，按名次精选整理，一份可以照着走的国内旅行清单。",
+        href: "/travel",
+        total: 100,
+        have: travel.length,
+        cta: "全部景点",
+        items: [...travel].sort(byMovieRankAsc).slice(0, 3).map((p) => attachMeta(p)),
+    },
+    {
+        title: "全球最值得看的100部电影",
+        description: "从影史殿堂、科幻悬疑到爱情动画，按名次精选整理，每部都有深度影评与预告片。",
+        href: "/movies",
+        total: 100,
+        have: movies.length,
+        cta: "全部电影",
+        items: [...movies].sort(byMovieRankAsc).slice(0, 3).map((p) => attachMeta(p)),
+    },
+    {
+        title: "全球最值得看的100部电视剧",
+        description: "从史诗权谋、悬疑犯罪到温情群像，按名次精选整理，附分季评价与追剧指南。",
+        href: "/tv",
+        total: 100,
+        have: tv.length,
+        cta: "全部电视剧",
+        items: [...tv].sort(byMovieRankAsc).slice(0, 3).map((p) => attachMeta(p)),
+    },
+];
+
 const topicPreview = topicGroups.slice(0, 4);
 const travelTop = [...travel].sort(byTravelRankAsc).slice(0, 6).map((p) => attachMeta(p));
 const movieTop = [...movies].sort(byMovieRankAsc).slice(0, 6).map((p) => attachMeta(p));
@@ -59,6 +91,28 @@ const hasContent = featured.length > 0 || latest.length > 0;
         {
             hasContent ? (
                 <>
+                    <section>
+                        <div class="mb-8">
+                            <h1 class="text-3xl font-bold md:text-4xl">三大精选清单</h1>
+                            <p class="mt-3 text-lg text-neutral-600 dark:text-neutral-400">
+                                中国最值得去的 100 个景点、全球最值得看的 100 部电影与 100 部电视剧——按名次精选，帮你一次挑到不踩雷的好去处、好片。
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                            {flagships.map((f) => (
+                                <FlagshipCard
+                                    title={f.title}
+                                    description={f.description}
+                                    href={f.href}
+                                    total={f.total}
+                                    have={f.have}
+                                    cta={f.cta}
+                                    items={f.items}
+                                />
+                            ))}
+                        </div>
+                    </section>
+
                     {featured.length > 0 && (
                         <FeaturedContent items={featured} />
                     )}

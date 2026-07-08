@@ -1,0 +1,50 @@
+---
+import type { ContentEntry, WithMeta } from "../../types";
+import { cardImageSrc } from "../../utils/images";
+
+interface Props {
+    title: string;
+    description: string;
+    href: string;
+    total: number; // 目标篇数（如 100）
+    have: number; // 已收录篇数
+    cta: string; // 按钮文案，如「全部景点」
+    items: WithMeta<ContentEntry>[]; // 用于封面预览的前几篇
+}
+
+const { title, description, href, total, have, cta, items } = Astro.props;
+const preview = items.slice(0, 3);
+const complete = have >= total;
+---
+
+<a
+    href={href}
+    class="group flex flex-col rounded-2xl border border-neutral-200 p-5 transition hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg dark:border-neutral-800 dark:hover:border-neutral-700"
+>
+    <div class="mb-4 grid grid-cols-3 gap-2">
+        {
+            preview.map((item) => (
+                <img
+                    src={cardImageSrc(item.data.image.src)}
+                    alt={item.data.image.alt ?? item.data.title}
+                    loading="lazy"
+                    class="aspect-[3/4] rounded-lg object-cover"
+                />
+            ))
+        }
+    </div>
+
+    <div class="mb-2 flex items-center gap-2">
+        <span class="rounded-md bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800 dark:bg-green-900 dark:text-green-300">
+            {complete ? `精选 ${total} 篇` : `更新中 · ${have}/${total}`}
+        </span>
+    </div>
+
+    <h3 class="text-xl font-bold group-hover:underline">{title}</h3>
+    <p class="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+        {description}
+    </p>
+    <div class="mt-4 text-sm font-semibold text-blue-600 dark:text-yellow-400">
+        {cta} →
+    </div>
+</a>
