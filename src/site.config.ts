@@ -41,6 +41,10 @@ export const header = [
     url: "/links",
   },
   {
+    name: "打卡",
+    url: "/checkin",
+  },
+  {
     name: "收藏",
     url: "/saved",
   },
@@ -81,6 +85,10 @@ export const footer = [
       {
         name: "外链导航",
         url: "/links",
+      },
+      {
+        name: "打卡清单",
+        url: "/checkin",
       },
       {
         name: "我的收藏",
