@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import Container from "../components/layouts/Container.astro";
-import PageTitle from "../components/ui/PageTitle.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const [travel, movies, tv] = await Promise.all([
@@ -13,7 +12,6 @@ const [travel, movies, tv] = await Promise.all([
 const rankOf = (e: any) =>
     typeof e.data.rank === "number" ? e.data.rank : 9999;
 
-// 为每篇文章取一个简短标签名
 const shortLabel = (e: any) => {
     const t: string = e.data.title;
     if (e.collection === "travel") {
@@ -29,75 +27,123 @@ const toChip = (e: any) => ({
     key: `${e.collection}/${e.id}`,
     rank: rankOf(e),
     label: shortLabel(e),
-    href: `/${e.collection}/${e.id}`,
 });
 
 const groups = [
     {
         id: "travel",
         name: "必去景点",
+        emoji: "🗺️",
         total: 100,
+        accentText: "text-emerald-600 dark:text-emerald-400",
+        bar: "bg-emerald-500",
+        ring: "from-emerald-400 to-teal-500",
         chips: travel.map(toChip).sort((a, b) => a.rank - b.rank),
     },
     {
         id: "movies",
         name: "必看电影",
+        emoji: "🎬",
         total: 100,
+        accentText: "text-amber-600 dark:text-amber-400",
+        bar: "bg-amber-500",
+        ring: "from-amber-400 to-orange-500",
         chips: movies.map(toChip).sort((a, b) => a.rank - b.rank),
     },
     {
         id: "tv",
         name: "必看电视剧",
+        emoji: "📺",
         total: 100,
+        accentText: "text-violet-600 dark:text-violet-400",
+        bar: "bg-violet-500",
+        ring: "from-violet-400 to-fuchsia-500",
         chips: tv.map(toChip).sort((a, b) => a.rank - b.rank),
     },
 ];
+
+const grandTotal = groups.reduce((n, g) => n + g.total, 0);
 ---
 
 <BaseLayout
-    title="打卡"
+    title="打卡清单"
     description="勾选你已经去过的景点、看过的电影和追完的剧，记录属于自己的进度。"
 >
     <Container class="py-12">
-        <PageTitle title="打卡清单" />
-        <p class="mt-4 max-w-3xl text-lg text-neutral-600 dark:text-neutral-400">
-            把你<strong>去过的景点、看过的电影、追完的剧</strong>点亮吧。进度只保存在当前浏览器里，随时回来继续。
-        </p>
+        <!-- 顶部进度总览 -->
+        <section class="overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-violet-50 p-6 sm:p-10 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900">
+            <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+                <div class="max-w-xl">
+                    <h1 class="text-3xl font-black tracking-tight sm:text-4xl">我的打卡清单</h1>
+                    <p class="mt-3 text-neutral-600 dark:text-neutral-400">
+                        把去过的景点、看过的电影、追完的剧一个个点亮吧。进度只保存在这台设备上，随时回来继续。
+                    </p>
+                    <div class="mt-5 flex items-center gap-3">
+                        <span class="text-sm text-neutral-500">总进度</span>
+                        <span class="overall-pct text-2xl font-black text-neutral-900 dark:text-neutral-100">0%</span>
+                        <span class="text-sm text-neutral-500">
+                            (<span class="overall-done font-semibold" data-total={grandTotal}>0</span> / {grandTotal})
+                        </span>
+                    </div>
+                    <div class="mt-3 h-2.5 w-full max-w-md overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-800">
+                        <div class="overall-bar h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-violet-500 transition-[width] duration-500" style="width:0%"></div>
+                    </div>
+                </div>
 
-        <div class="mt-6 flex flex-wrap items-center gap-4 rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
-            <div class="text-sm text-neutral-600 dark:text-neutral-400">
-                总进度 <span class="checkin-total-done font-bold text-neutral-900 dark:text-neutral-100">0</span> / {groups.reduce((n, g) => n + g.total, 0)}
+                <!-- 三个分类小卡 -->
+                <div class="grid grid-cols-3 gap-3">
+                    {
+                        groups.map((g) => (
+                            <div class="rounded-2xl border border-neutral-200 bg-white/70 px-4 py-4 text-center backdrop-blur dark:border-neutral-800 dark:bg-neutral-900/70">
+                                <div class="text-2xl">{g.emoji}</div>
+                                <div class="mt-1 text-xs text-neutral-500">{g.name}</div>
+                                <div class={`mt-1 text-xl font-black ${g.accentText}`}>
+                                    <span class="stat-frac" data-group={g.id}>0</span>
+                                    <span class="text-sm font-medium text-neutral-400">/{g.total}</span>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
-            <button class="checkin-reset ml-auto rounded-lg border border-neutral-200 px-3 py-1.5 text-sm font-medium text-neutral-600 transition hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-900">
+        </section>
+
+        <div class="mt-6 flex justify-end">
+            <button class="checkin-reset rounded-lg border border-neutral-200 px-3 py-1.5 text-sm font-medium text-neutral-500 transition hover:bg-neutral-50 hover:text-red-600 dark:border-neutral-700 dark:hover:bg-neutral-900">
                 清空全部打卡
             </button>
         </div>
 
         {
             groups.map((g) => (
-                <section class="mt-10" data-group={g.id}>
-                    <div class="mb-3 flex items-baseline justify-between gap-3">
-                        <h2 class="text-2xl font-bold">{g.name}</h2>
-                        <div class="text-sm text-neutral-500">
-                            已打卡 <span class="checkin-count font-bold text-green-600 dark:text-green-400" data-group={g.id}>0</span> / {g.total}
-                        </div>
+                <section class="mt-8 rounded-2xl border border-neutral-200 p-5 sm:p-6 dark:border-neutral-800" data-group={g.id}>
+                    <div class="mb-3 flex items-center gap-3">
+                        <span class="text-2xl">{g.emoji}</span>
+                        <h2 class="text-xl font-bold">{g.name}</h2>
+                        <span class={`ml-auto text-sm font-semibold ${g.accentText}`}>
+                            <span class="stat-frac" data-group={g.id}>0</span> / {g.total}
+                        </span>
                     </div>
                     <div class="mb-5 h-2 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-800">
-                        <div class="checkin-bar h-full rounded-full bg-green-500 transition-[width] duration-300" data-group={g.id} style="width:0%"></div>
+                        <div class={`checkin-bar h-full rounded-full ${g.bar} transition-[width] duration-500`} data-group={g.id} style="width:0%" />
                     </div>
                     <div class="flex flex-wrap gap-2">
                         {g.chips.map((c) => (
                             <button
                                 type="button"
-                                class="checkin-chip group inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-700 transition hover:border-green-400 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300"
+                                class="checkin-chip group inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white py-1.5 pr-3.5 pl-1.5 text-sm text-neutral-700 transition hover:-translate-y-0.5 hover:border-neutral-400 hover:shadow-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300"
                                 data-key={c.key}
                                 data-group={g.id}
                                 title={c.label}
                             >
-                                <span class="checkin-tick flex h-4 w-4 items-center justify-center rounded-full border border-neutral-300 text-[10px] leading-none dark:border-neutral-600">
-                                    <span class="checkin-tick-mark hidden">✓</span>
+                                <span class="checkin-tick flex h-5 w-5 items-center justify-center rounded-full border border-neutral-300 text-[11px] leading-none text-transparent dark:border-neutral-600">
+                                    ✓
                                 </span>
-                                <span class="text-neutral-400 tabular-nums">{c.rank <= 100 ? c.rank : ""}</span>
+                                {c.rank <= 100 && (
+                                    <span class="checkin-rank text-xs font-semibold text-neutral-400 tabular-nums">
+                                        {c.rank}
+                                    </span>
+                                )}
                                 <span>{c.label}</span>
                             </button>
                         ))}
@@ -106,8 +152,12 @@ const groups = [
             ))
         }
 
-        <p class="mt-12 text-sm text-neutral-500">
-            提示：想边看边勾，可在<a href="/travel" class="underline">景点</a>、<a href="/movies" class="underline">电影</a>、<a href="/tv" class="underline">电视剧</a>列表里挑选阅读，再回来打卡。
+        <p class="mt-12 text-center text-sm text-neutral-500">
+            想边看边勾，可去
+            <a href="/travel" class="font-medium underline">景点</a>、
+            <a href="/movies" class="font-medium underline">电影</a>、
+            <a href="/tv" class="font-medium underline">电视剧</a>
+            列表挑选阅读，再回来点亮。
         </p>
     </Container>
 </BaseLayout>
@@ -115,6 +165,7 @@ const groups = [
 <script>
     const KEY = "checkinDone";
     const chips = Array.from(document.querySelectorAll<HTMLButtonElement>(".checkin-chip"));
+    const TOTAL = Number(document.querySelector<HTMLElement>(".overall-done")?.dataset.total) || chips.length;
 
     const load = (): Set<string> => {
         try {
@@ -126,44 +177,50 @@ const groups = [
     const save = (set: Set<string>) =>
         localStorage.setItem(KEY, JSON.stringify([...set]));
 
+    const CHECKED_CHIP = ["border-emerald-500", "bg-emerald-50", "text-emerald-800", "dark:bg-emerald-900/30", "dark:border-emerald-600", "dark:text-emerald-300"];
+    const CHECKED_TICK = ["bg-emerald-500", "border-emerald-500", "!text-white"];
+
     const paintChip = (chip: HTMLElement, on: boolean) => {
         const tick = chip.querySelector<HTMLElement>(".checkin-tick");
-        const mark = chip.querySelector<HTMLElement>(".checkin-tick-mark");
-        chip.classList.toggle("border-green-500", on);
-        chip.classList.toggle("bg-green-50", on);
-        chip.classList.toggle("dark:bg-green-900/30", on);
-        chip.classList.toggle("dark:border-green-600", on);
-        chip.classList.toggle("text-green-800", on);
-        chip.classList.toggle("dark:text-green-300", on);
-        tick?.classList.toggle("bg-green-500", on);
-        tick?.classList.toggle("border-green-500", on);
-        tick?.classList.toggle("text-white", on);
-        mark?.classList.toggle("hidden", !on);
+        const rank = chip.querySelector<HTMLElement>(".checkin-rank");
+        CHECKED_CHIP.forEach((c) => chip.classList.toggle(c, on));
+        CHECKED_TICK.forEach((c) => tick?.classList.toggle(c, on));
+        rank?.classList.toggle("text-emerald-500", on);
+        rank?.classList.toggle("text-neutral-400", !on);
     };
 
-    const refreshCounts = (set: Set<string>) => {
-        const groups: Record<string, number> = {};
+    const refresh = (set: Set<string>) => {
+        const counts: Record<string, number> = {};
+        const sizes: Record<string, number> = {};
         chips.forEach((chip) => {
             const g = chip.dataset.group!;
-            groups[g] = groups[g] || 0;
-            if (set.has(chip.dataset.key!)) groups[g]++;
+            sizes[g] = (sizes[g] || 0) + 1;
+            counts[g] = counts[g] || 0;
+            if (set.has(chip.dataset.key!)) counts[g]++;
         });
-        document.querySelectorAll<HTMLElement>(".checkin-count").forEach((el) => {
-            el.textContent = String(groups[el.dataset.group!] || 0);
+        document.querySelectorAll<HTMLElement>(".stat-frac").forEach((el) => {
+            el.textContent = String(counts[el.dataset.group!] || 0);
         });
         document.querySelectorAll<HTMLElement>(".checkin-bar").forEach((el) => {
             const g = el.dataset.group!;
-            const total = chips.filter((c) => c.dataset.group === g).length || 1;
-            el.style.width = `${Math.round(((groups[g] || 0) / total) * 100)}%`;
+            const total = sizes[g] || 1;
+            el.style.width = `${Math.round(((counts[g] || 0) / total) * 100)}%`;
         });
-        const totalDone = document.querySelector<HTMLElement>(".checkin-total-done");
-        if (totalDone) totalDone.textContent = String(set.size);
+        const done = set.size;
+        const denom = TOTAL || chips.length || 1;
+        const overallDone = document.querySelector<HTMLElement>(".overall-done");
+        const overallPct = document.querySelector<HTMLElement>(".overall-pct");
+        const overallBar = document.querySelector<HTMLElement>(".overall-bar");
+        if (overallDone) overallDone.textContent = String(done);
+        const pct = Math.round((done / denom) * 100);
+        if (overallPct) overallPct.textContent = `${pct}%`;
+        if (overallBar) (overallBar as HTMLElement).style.width = `${pct}%`;
     };
 
     const render = () => {
         const set = load();
         chips.forEach((chip) => paintChip(chip, set.has(chip.dataset.key!)));
-        refreshCounts(set);
+        refresh(set);
     };
 
     chips.forEach((chip) => {
@@ -174,7 +231,7 @@ const groups = [
             else set.add(k);
             save(set);
             paintChip(chip, set.has(k));
-            refreshCounts(set);
+            refresh(set);
         });
     });
 
