@@ -2,6 +2,7 @@
 import { getEntry } from "astro:content";
 import FeaturedTag from "./FeaturedTag.astro";
 import FavoriteButton from "./FavoriteButton.astro";
+import CheckinButton from "./CheckinButton.astro";
 import FormattedDate from "./FormattedDate.astro";
 import PostCopyright from "./PostCopyright.astro";
 import Series from "./Series.astro";
@@ -89,8 +90,13 @@ const repoUrl = "repoUrl" in data ? data.repoUrl : undefined;
     {series && <Series {series} class="mt-6" />}
     {tags.length > 0 && <Tags {tags} class="mt-6" />}
 
-    <div class="mt-6">
+    <div class="mt-6 flex flex-wrap items-center gap-3">
         <FavoriteButton {entry} class="size-auto gap-2 rounded-lg px-4 py-2" />
+        {
+            (collection === "travel" ||
+                collection === "movies" ||
+                collection === "tv") && <CheckinButton {entry} />
+        }
     </div>
 
     {

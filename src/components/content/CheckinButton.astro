@@ -1,0 +1,73 @@
+---
+import { Icon } from "astro-icon/components";
+import type { ContentEntry } from "../../types";
+
+interface Props {
+    entry: ContentEntry;
+    class?: string;
+}
+
+const { entry, class: cls = "" } = Astro.props;
+const key = `${entry.collection}/${entry.id}`;
+// 去过 / 看过：旅游用"去过"，影视用"看过"
+const doneWord = entry.collection === "travel" ? "去过了" : "看过了";
+---
+
+<button
+    type="button"
+    class={`checkin-detail-toggle z-20 inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white/95 px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-100 active:scale-95 dark:border-neutral-700 dark:bg-neutral-900/95 dark:text-neutral-100 dark:hover:bg-neutral-800 ${cls}`}
+    data-checkin-key={key}
+    data-done-word={doneWord}
+    aria-label="打卡"
+    aria-pressed="false"
+>
+    <Icon name="lucide:circle" class="checkin-icon-off size-5" />
+    <Icon name="lucide:circle-check-big" class="checkin-icon-on hidden size-5" />
+    <span class="checkin-detail-label">标记为已打卡</span>
+</button>
+
+<script is:inline>
+    (() => {
+        const KEY = "checkinDone";
+        const read = () => {
+            try {
+                return JSON.parse(localStorage.getItem(KEY) || "[]");
+            } catch {
+                return [];
+            }
+        };
+        const write = (arr) => localStorage.setItem(KEY, JSON.stringify(arr));
+        const refresh = () => {
+            const set = new Set(read());
+            document.querySelectorAll(".checkin-detail-toggle").forEach((btn) => {
+                const active = set.has(btn.dataset.checkinKey);
+                btn.setAttribute("aria-pressed", String(active));
+                btn.classList.toggle("border-green-500", active);
+                btn.classList.toggle("bg-green-50", active);
+                btn.classList.toggle("text-green-700", active);
+                btn.classList.toggle("dark:bg-green-900/30", active);
+                btn.classList.toggle("dark:border-green-600", active);
+                btn.classList.toggle("dark:text-green-300", active);
+                btn.querySelector(".checkin-icon-on")?.classList.toggle("hidden", !active);
+                btn.querySelector(".checkin-icon-off")?.classList.toggle("hidden", active);
+                const label = btn.querySelector(".checkin-detail-label");
+                if (label) label.textContent = active ? `已打卡 · ${btn.dataset.doneWord}` : "标记为已打卡";
+            });
+        };
+        if (!window.__checkinDetailReady) {
+            window.__checkinDetailReady = true;
+            document.addEventListener("click", (event) => {
+                const btn = event.target.closest?.(".checkin-detail-toggle");
+                if (!btn) return;
+                event.preventDefault();
+                event.stopPropagation();
+                const k = btn.dataset.checkinKey;
+                const arr = read();
+                write(arr.includes(k) ? arr.filter((x) => x !== k) : [...arr, k]);
+                refresh();
+            });
+            document.addEventListener("astro:page-load", refresh);
+        }
+        refresh();
+    })();
+</script>
