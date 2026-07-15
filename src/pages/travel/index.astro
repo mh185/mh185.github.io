@@ -1,16 +1,28 @@
 ---
 import { getCollection } from "astro:content";
 import ListLayout from "../../layouts/ListLayout.astro";
-import { byTravelRankAsc } from "../../utils/contentEnhancements";
+import {
+    byTravelRankAsc,
+    itemListStructuredData,
+} from "../../utils/contentEnhancements";
 import { attachMeta } from "../../utils/meta";
 
-const posts = (await getCollection("travel", ({ data }) => !data.draft))
-    .sort(byTravelRankAsc)
-    .map((p) => attachMeta(p));
+const sorted = (await getCollection("travel", ({ data }) => !data.draft)).sort(
+    byTravelRankAsc,
+);
+const posts = sorted.map((p) => attachMeta(p));
+const jsonLd = [
+    itemListStructuredData(
+        sorted as any,
+        Astro.site?.href ?? "/",
+        "中国100个必去景点",
+    ),
+];
 ---
 
 <ListLayout
     title="旅游推荐"
-    description="精选国内外旅游目的地推荐、路线攻略与真实游记,帮你避坑、玩得更值。"
+    description="中国100个必去景点，按名次精选整理，山岳、古建、石窟、湖海海岛全覆盖，每处都有路线、交通、住宿、避坑攻略，帮你玩得更值。"
     entries={posts}
+    {jsonLd}
 />

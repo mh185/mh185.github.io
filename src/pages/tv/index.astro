@@ -1,15 +1,28 @@
 ---
 import { getCollection } from "astro:content";
 import ListLayout from "../../layouts/ListLayout.astro";
+import {
+    byMovieRankAsc,
+    itemListStructuredData,
+} from "../../utils/contentEnhancements";
 import { attachMeta } from "../../utils/meta";
 
-const posts = (await getCollection("tv", ({ data }) => !data.draft))
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .map((p) => attachMeta(p));
+const sorted = (await getCollection("tv", ({ data }) => !data.draft)).sort(
+    byMovieRankAsc,
+);
+const posts = sorted.map((p) => attachMeta(p));
+const jsonLd = [
+    itemListStructuredData(
+        sorted as any,
+        Astro.site?.href ?? "/",
+        "全球100部必看电视剧",
+    ),
+];
 ---
 
 <ListLayout
     title="电视剧推荐"
-    description="值得追的电视剧、美剧推荐与剧评,总有一部让你上头。"
+    description="全球100部必看电视剧，按名次精选整理，涵盖史诗权谋、悬疑犯罪、科幻、情景喜剧各类型，每部都有分季评价与追剧指南，总有一部让你上头。"
     entries={posts}
+    {jsonLd}
 />

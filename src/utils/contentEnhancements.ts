@@ -251,6 +251,103 @@ export function getRelatedEntries(entry: Entry, entries: Entry[], limit = 6) {
         .map(({ item }) => item);
 }
 
+// 从标题提取用于结构化数据/面包屑的简洁名称
+export function displayName(entry: Entry): string {
+    const t = entry.data.title;
+    if (entry.collection === "travel") {
+        const m = t.match(/第\d+名[:：]\s*(.+?)(?:深度攻略|攻略|$)/);
+        if (m) return m[1];
+        return t.replace(/^中国必去景点第\d+名[:：]?/, "").split(/[,，:：]/)[0];
+    }
+    const m = t.match(/《([^》]+)》/);
+    return m ? m[1] : t.split(/[,，:：]/)[0];
+}
+
+const schemaEntityType: Record<MainCollection, string> = {
+    travel: "TouristAttraction",
+    movies: "Movie",
+    tv: "TVSeries",
+};
+
+// 文章页结构化数据：Review（含被评实体 Movie/TVSeries/TouristAttraction）+ 面包屑
+export function articleStructuredData(
+    entry: Entry,
+    siteHref: string,
+    ogImage: string,
+    authorName: string,
+): Record<string, unknown>[] {
+    const name = displayName(entry);
+    const url = new URL(entryUrl(entry), siteHref).href;
+    const tags = entry.data.tags;
+    const year = tags.find((x) => /^\d{4}$/.test(x));
+
+    const entity: Record<string, unknown> = {
+        "@type": schemaEntityType[entry.collection],
+        name,
+        image: ogImage,
+        description: entry.data.description,
+    };
+    if (entry.collection === "movies" || entry.collection === "tv") {
+        const person = tags[1];
+        if (person) {
+            entity[entry.collection === "tv" ? "creator" : "director"] = {
+                "@type": "Person",
+                name: person,
+            };
+        }
+        if (year) entity.dateCreated = year;
+    }
+
+    const review = {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        name: entry.data.title,
+        reviewBody: entry.data.description,
+        datePublished: entry.data.pubDate?.toISOString?.(),
+        author: { "@type": "Person", name: authorName },
+        inLanguage: "zh-CN",
+        url,
+        itemReviewed: entity,
+    };
+
+    const breadcrumb = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            { "@type": "ListItem", position: 1, name: "首页", item: siteHref },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: collectionLabels[entry.collection],
+                item: new URL(collectionLinks[entry.collection], siteHref).href,
+            },
+            { "@type": "ListItem", position: 3, name, item: url },
+        ],
+    };
+
+    return [review, breadcrumb];
+}
+
+// 列表页结构化数据：ItemList（按名次的清单）
+export function itemListStructuredData(
+    entries: Entry[],
+    siteHref: string,
+    name: string,
+): Record<string, unknown> {
+    return {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name,
+        numberOfItems: entries.length,
+        itemListElement: entries.map((e, i) => ({
+            "@type": "ListItem",
+            position: typeof e.data.rank === "number" ? e.data.rank : i + 1,
+            url: new URL(entryUrl(e), siteHref).href,
+            name: displayName(e),
+        })),
+    };
+}
+
 export function getInfoItems(entry: Entry) {
     const tags = entry.data.tags;
     if (entry.collection === "travel") {

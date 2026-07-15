@@ -47,7 +47,19 @@ export default defineConfig({
   ],
 
   integrations: [
-    sitemap(),
+    sitemap({
+      changefreq: "weekly",
+      lastmod: new Date(),
+      serialize(item) {
+        // 首页与三大列表页优先级最高，文章次之
+        const u = item.url;
+        if (u.endsWith("mh185.github.io/")) item.priority = 1.0;
+        else if (/\/(movies|travel|tv)\/$/.test(u)) item.priority = 0.9;
+        else if (/\/(movies|travel|tv)\//.test(u)) item.priority = 0.7;
+        else item.priority = 0.5;
+        return item;
+      },
+    }),
     pagefind(),
     icon(),
     expressiveCode({

@@ -11,8 +11,15 @@ import MediumZoom from "../components/integrations/MediumZoom.astro";
 import { Icon } from "astro-icon/components";
 import type { ContentEntry, WithMeta } from "../types";
 import BaseLayout from "./BaseLayout.astro";
-import { getRelatedEntries } from "../utils/contentEnhancements";
+import {
+    articleStructuredData,
+    collectionLabels,
+    collectionLinks,
+    displayName,
+    getRelatedEntries,
+} from "../utils/contentEnhancements";
 import { attachMeta } from "../utils/meta";
+import { SITE_SETTINGS } from "../site.config";
 
 interface Props {
     entry: WithMeta<ContentEntry>;
@@ -21,6 +28,28 @@ interface Props {
 const { entry } = Astro.props;
 
 const { Content, headings } = await render(entry);
+
+// SEO：结构化数据 + 面包屑
+const siteHref = Astro.site?.href ?? "/";
+const ogImage = new URL(entry.data.image.src, Astro.site).href;
+const structuredData =
+    entry.collection === "travel" ||
+    entry.collection === "movies" ||
+    entry.collection === "tv"
+        ? articleStructuredData(
+              entry as any,
+              siteHref,
+              ogImage,
+              SITE_SETTINGS.owner,
+          )
+        : [];
+const crumbLabel =
+    collectionLabels[entry.collection as keyof typeof collectionLabels];
+const crumbLink =
+    collectionLinks[entry.collection as keyof typeof collectionLinks];
+const crumbName = ["travel", "movies", "tv"].includes(entry.collection)
+    ? displayName(entry as any)
+    : entry.data.title;
 
 const allPostsInCollection = await getCollection(entry.collection);
 
@@ -43,6 +72,7 @@ const relatedPosts = getRelatedEntries(
         modifiedTime: entry.data.updatedDate,
         tags: entry.data.tags,
     }}
+    jsonLd={structuredData}
 >
     <MediumZoom />
 
@@ -62,6 +92,17 @@ const relatedPosts = getRelatedEntries(
 
     <Article>
         <div data-pagefind-body>
+            {
+                crumbLabel && (
+                    <nav aria-label="面包屑" class="mb-6 text-sm text-neutral-500 dark:text-neutral-400">
+                        <a href="/" class="hover:underline">首页</a>
+                        <span class="mx-1.5">/</span>
+                        <a href={crumbLink} class="hover:underline">{crumbLabel}</a>
+                        <span class="mx-1.5">/</span>
+                        <span class="text-neutral-700 dark:text-neutral-300">{crumbName}</span>
+                    </nav>
+                )
+            }
             <!-- Header -->
             <PostMeta {entry} />
 

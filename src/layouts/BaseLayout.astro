@@ -18,6 +18,8 @@ interface Props {
         modifiedTime?: Date;
         tags?: string[];
     };
+    /** 每页附加的结构化数据(如 Review / BreadcrumbList / ItemList) */
+    jsonLd?: Record<string, unknown>[];
 }
 
 const {
@@ -25,6 +27,7 @@ const {
     description = SITE_SETTINGS.description,
     image,
     article,
+    jsonLd: extraJsonLd = [],
 } = Astro.props;
 
 const siteTitle = SITE_SETTINGS.title;
@@ -39,14 +42,23 @@ const ogImageURL = new URL(image ?? SITE_SETTINGS.ogImages, Astro.site).href;
 const isArticle = !!article;
 
 // 结构化数据(JSON-LD)
+const siteHref = Astro.site?.href;
+const logoURL = siteHref ? new URL("/favicon.svg", Astro.site).href : undefined;
 const jsonLd: Record<string, unknown>[] = [
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: siteTitle,
-        url: Astro.site?.href,
+        alternateName: "中国100个必去景点 · 全球100部必看电影 · 100部必看电视剧",
+        url: siteHref,
         description: SITE_SETTINGS.description,
         inLanguage: "zh-CN",
+        publisher: {
+            "@type": "Organization",
+            name: siteTitle,
+            url: siteHref,
+            ...(logoURL ? { logo: logoURL } : {}),
+        },
     },
 ];
 
@@ -62,12 +74,19 @@ if (article) {
             article.modifiedTime ?? article.publishedTime
         )?.toISOString(),
         author: { "@type": "Person", name: SITE_SETTINGS.owner },
-        publisher: { "@type": "Organization", name: siteTitle },
+        publisher: {
+            "@type": "Organization",
+            name: siteTitle,
+            ...(logoURL ? { logo: logoURL } : {}),
+        },
         mainEntityOfPage: canonicalURL.href,
         keywords: article.tags?.join(", "),
         inLanguage: "zh-CN",
     });
 }
+
+// 追加每页自定义结构化数据
+jsonLd.push(...extraJsonLd);
 ---
 
 <html lang="zh-CN" class="scroll-smooth">

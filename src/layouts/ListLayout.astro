@@ -12,14 +12,15 @@ interface Props {
     description?: string;
     ogImage?: string;
     entries: WithMeta<ContentEntry>[];
+    jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description = "", entries, ogImage } = Astro.props;
+const { title, description = "", entries, ogImage, jsonLd } = Astro.props;
 
 const collection = entries[0]?.collection;
 ---
 
-<BaseLayout {title} {description}>
+<BaseLayout {title} {description} {jsonLd}>
     <Container class="py-12">
         <PageTitle {title} />
         {

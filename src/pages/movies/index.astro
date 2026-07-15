@@ -2,20 +2,29 @@
 import { getCollection } from "astro:content";
 import ListLayout from "../../layouts/ListLayout.astro";
 import { attachMeta } from "../../utils/meta";
+import { itemListStructuredData } from "../../utils/contentEnhancements";
 
-const posts = (await getCollection("movies", ({ data }) => !data.draft))
+const sorted = (await getCollection("movies", ({ data }) => !data.draft))
     // 先按榜单名次升序（无名次的排在最后），名次相同再按发布日期倒序
     .sort((a, b) => {
         const ra = a.data.rank ?? Infinity;
         const rb = b.data.rank ?? Infinity;
         if (ra !== rb) return ra - rb;
         return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
-    })
-    .map((p) => attachMeta(p));
+    });
+const posts = sorted.map((p) => attachMeta(p));
+const jsonLd = [
+    itemListStructuredData(
+        sorted as any,
+        Astro.site?.href ?? "/",
+        "全球100部必看电影",
+    ),
+];
 ---
 
 <ListLayout
     title="电影推荐"
-    description="好看的电影推荐与影评,恐怖、悬疑、爱情各种类型,帮你挑到不踩雷的好片。"
+    description="全球100部必看电影，按名次精选整理，涵盖剧情、科幻、悬疑、爱情、动画各类型，每部都有深度影评与官方预告片，帮你挑到不踩雷的好片。"
     entries={posts}
+    {jsonLd}
 />
